@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block head %}
   <style>
@@ -51,48 +51,49 @@
 
 {% block body %}
   <div class="searchContainer">
-    <h1>Keittokirja</h1>
+    <h1 class="logo">Keittokirja</h1>
     <form>
       <input name="search" type="text" placeholder="Placeholder" autofocus />
     </form>
+    {% include './components/navbar.html' %}
   </div>
   <div class="topPicks">
-    <a href="/" class="card">
+    <a href="/page" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>Recipe</h2>
         <p>by user</p>
       </div>
     </a>
-    <a href="/" class="card">
+    <a href="/page" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>Recipe</h2>
         <p>by user</p>
       </div>
     </a>
-    <a href="/" class="card">
+    <a href="/page" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>Recipe</h2>
         <p>by user</p>
       </div>
     </a>
-    <a href="/" class="card">
+    <a href="/page" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>Recipe</h2>
         <p>by user</p>
       </div>
     </a>
-    <a href="/" class="card">
+    <a href="/page" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>Recipe</h2>
         <p>by user</p>
       </div>
     </a>
-    <a href="/" class="card">
+    <a href="/page" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>Recipe</h2>

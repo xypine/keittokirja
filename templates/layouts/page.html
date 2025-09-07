@@ -1,0 +1,18 @@
+{% extends 'layouts/base.html' %}
+{% block body %}
+    <header>
+        <div class="headerBar">
+            <h1 class="logo">
+                <a href="/">
+                    Keittokirja
+                </a>
+            </h1>
+            {% include 'components/navbar.html' %}
+        </div>
+        <div>
+            {% block header %}{% endblock %}
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+{% endblock %}
+<!-- vim: set filetype=htmldjango: -->

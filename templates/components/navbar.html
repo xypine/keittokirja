@@ -1,0 +1,18 @@
+<nav>
+    <ul>
+        {% for item in nav_items %}
+        <li class="nav-item">
+            {% if item.active %}
+                <p class="nav-link">
+                    {{ item.label }}
+                </p>
+            {% else %}
+                <a href="{{ item.url }}" class="nav-link">
+                    {{ item.label }}
+                </a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+<!-- vim: set filetype=htmldjango: -->
