@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 
+from src.ingredients import Ingredient, NewIngredient
+
 app = Flask(__name__)
 
 
@@ -8,12 +10,6 @@ def inject_nav_items():
     current_endpoint = request.endpoint or "unknown"
 
     nav_items = [
-        {
-            "url": "/",
-            "label": "Search",
-            "endpoint": "index",
-            "active": current_endpoint == "index",
-        },
         {
             "url": "/ingredients",
             "label": "Ingredients",
@@ -38,7 +34,8 @@ def index():
 
 @app.route("/ingredients")
 def ingredients():
-    return render_template("ingredients.html")
+    ingredients = Ingredient.get_all()
+    return render_template("ingredients.html", ingredients=ingredients)
 
 
 @app.route("/recipes")

@@ -15,6 +15,7 @@ CREATE TABLE recipe_requirement (
 
 	recipe_id INTEGER NOT NULL,
 	ingredient_id INTEGER NOT NULL,
+	extra_info TEXT,
 
 	created_by INTEGER NOT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

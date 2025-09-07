@@ -13,6 +13,10 @@
       min-height: max(500px, 80vh);
     }
 
+    .search {
+      margin-bottom: 0.5rem;
+    }
+
     .topPicks {
       display: grid;
       --item-width: min(500px, 100vw);
@@ -52,7 +56,7 @@
 {% block body %}
   <div class="searchContainer">
     <h1 class="logo">Keittokirja</h1>
-    <form>
+    <form class="search">
       <input name="search" type="text" placeholder="Placeholder" autofocus />
     </form>
     {% include './components/navbar.html' %}

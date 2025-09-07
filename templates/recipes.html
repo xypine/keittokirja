@@ -1,7 +1,59 @@
 {% extends 'layouts/page.html' %}
 
+{% block head %}
+  <style>
+    .subtitle {
+      padding: 1rem;
+    }
+
+    .recipes {
+      display: grid;
+      --item-width: min(500px, 100vw);
+      grid-template-columns: repeat(auto-fit, minmax(var(--item-width), 1fr));
+      gap: .5rem;
+      padding: .5rem;
+    }
+
+    .card {
+      min-width: var(--item-width);
+      min-height: 500px;
+
+      display: flex;
+      flex-direction: column;
+
+      & .bg {
+        flex: 1;
+        background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & .text {
+        padding: .5rem;
+        display: flex;
+        gap: .5rem;
+        align-items: baseline;
+      }
+
+      text-decoration: none;
+      color: currentColor;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
-  <h1>{% block title %}Recipes{% endblock %}</h1>
-  <h1>HEYO</h1>
+  <h1 class="subtitle">{% block title %}Recipes{% endblock %}</h1>
+  <div class="recipes">
+  {% for recipe in recipes %}
+    <a href="/ingredients/{{ recipe.id }}" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>{{ recipe.name }}</h2>
+        <p>by {{ recipe.created_by }}</p>
+      </div>
+    </a>
+  {% endfor %}
+
+  </div>
 {% endblock %}
 <!-- vim: set filetype=htmldjango: -->

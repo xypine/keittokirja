@@ -102,10 +102,11 @@ header {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 nav {
-  padding: 0.5rem;
+  padding-bottom: 0.5rem;
 
   & ul {
     list-style: none;
