@@ -1,6 +1,3 @@
-BEGIN TRANSACTION;
-INSERT INTO migration (name) VALUES ('ingredients');
-
 CREATE TABLE ingredient (
 	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	name TEXT NOT NULL UNIQUE,
@@ -9,5 +6,3 @@ CREATE TABLE ingredient (
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (created_by) REFERENCES user (id)
 );
-
-COMMIT;

@@ -7,7 +7,7 @@ edit:
     uv run nvim
 
 db-migrate:
-    ./scripts/migrate.sh
+    ./scripts/migrate.py
 
 db-wipe:
     rm -rf dev.db && just db-migrate

@@ -1,6 +1,3 @@
-BEGIN TRANSACTION;
-INSERT INTO migration (name) VALUES ('recipes');
-
 CREATE TABLE recipe (
 	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	name TEXT NOT NULL UNIQUE,
@@ -27,5 +24,3 @@ CREATE TABLE recipe_requirement (
 
 	FOREIGN KEY (created_by) REFERENCES users (id)
 );
-
-COMMIT;
