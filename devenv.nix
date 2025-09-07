@@ -5,6 +5,10 @@
   ...
 }:
 {
+  env = {
+    DATABASE_URL = "dev.db";
+  };
+
   # https://devenv.sh/languages/
   languages = {
     python = {
@@ -14,6 +18,7 @@
   };
 
   packages = with pkgs; [
+    sqlite
     just
   ];
 

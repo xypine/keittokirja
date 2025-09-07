@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Database files
+*.db
+
 # Devenv
 .devenv*
 devenv.local.nix

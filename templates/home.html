@@ -1,15 +1,104 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Some thingy</title>
-    <link
-      href="{{ url_for('static', filename='css/style.css') }}"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    Heyo!
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block head %}
+  <style>
+    .searchContainer {
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      min-height: max(500px, 80vh);
+    }
+
+    .topPicks {
+      display: grid;
+      --item-width: min(500px, 100vw);
+
+      grid-template-columns: repeat(auto-fit, minmax(var(--item-width), 1fr));
+      gap: .5rem;
+      padding: .5rem;
+    }
+
+    .card {
+      min-width: var(--item-width);
+      min-height: 500px;
+
+      display: flex;
+      flex-direction: column;
+
+      & .bg {
+        flex: 1;
+        background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & .text {
+        padding: .5rem;
+        display: flex;
+        gap: .5rem;
+        align-items: baseline;
+      }
+
+      text-decoration: none;
+      color: currentColor;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <div class="searchContainer">
+    <h1>Keittokirja</h1>
+    <form>
+      <input name="search" type="text" placeholder="Placeholder" autofocus />
+    </form>
+  </div>
+  <div class="topPicks">
+    <a href="/" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>Recipe</h2>
+        <p>by user</p>
+      </div>
+    </a>
+    <a href="/" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>Recipe</h2>
+        <p>by user</p>
+      </div>
+    </a>
+    <a href="/" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>Recipe</h2>
+        <p>by user</p>
+      </div>
+    </a>
+    <a href="/" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>Recipe</h2>
+        <p>by user</p>
+      </div>
+    </a>
+    <a href="/" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>Recipe</h2>
+        <p>by user</p>
+      </div>
+    </a>
+    <a href="/" class="card">
+      <div class="bg"></div>
+      <div class="text">
+        <h2>Recipe</h2>
+        <p>by user</p>
+      </div>
+    </a>
+  </div>
+{% endblock %}
+<!-- vim: set filetype=htmldjango: -->

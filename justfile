@@ -5,3 +5,9 @@ default:
 
 edit:
     uv run nvim
+
+db-migrate:
+    ./scripts/migrate.sh
+
+db-wipe:
+    rm -rf dev.db && just db-migrate

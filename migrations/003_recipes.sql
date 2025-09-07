@@ -1,0 +1,30 @@
+BEGIN TRANSACTION;
+INSERT INTO migration (name) VALUES ('recipes');
+
+CREATE TABLE recipe (
+	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	name TEXT NOT NULL UNIQUE,
+	created_by INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (created_by) REFERENCES user (id)
+);
+
+CREATE TABLE recipe_requirement (
+	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+
+	recipe_id INTEGER NOT NULL,
+	ingredient_id INTEGER NOT NULL,
+
+	created_by INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	FOREIGN KEY (recipe_id) REFERENCES recipe (id),
+	FOREIGN KEY (ingredient_id) REFERENCES ingredient (id),
+	UNIQUE (recipe_id, ingredient_id),
+
+	FOREIGN KEY (created_by) REFERENCES users (id)
+);
+
+COMMIT;
