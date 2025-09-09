@@ -89,8 +89,21 @@ button {
   line-height: 1;
 }
 
+.btn {
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+
+  text-decoration: none;
+  color: currentColor;
+
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+
+  cursor: pointer;
+}
+
 input {
-  padding: 0.1rem 0.5rem;
+  padding: 0.15rem 0.5rem;
 }
 
 header {

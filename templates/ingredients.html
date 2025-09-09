@@ -2,8 +2,11 @@
 
 {% block head %}
   <style>
-    .subtitle {
+    .content-nav {
       padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
     }
 
     .ingredients {
@@ -42,7 +45,10 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="subtitle">{% block title %}Ingredients{% endblock %}</h1>
+  <div class="content-nav">
+    <h1 class="subtitle">{% block title %}Ingredients{% endblock %}</h1>
+    <a href="/ingredients/new" class="btn">New</a>
+  </div>
   <div class="ingredients">
   {% for ingredient in ingredients %}
     <a href="/ingredients/{{ ingredient.id }}" class="card">

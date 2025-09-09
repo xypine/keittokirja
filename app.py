@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 from src.ingredients import Ingredient, NewIngredient
 
@@ -36,6 +36,22 @@ def index():
 def ingredients():
     ingredients = Ingredient.get_all()
     return render_template("ingredients.html", ingredients=ingredients)
+
+
+@app.route("/ingredients/new")
+def new_ingredient():
+    return render_template("ingredients_new.html")
+
+
+@app.route("/ingredients/new", methods=["POST"])
+def new_message():
+    name = request.form["name"]
+    # user_id = session["user_id"]
+
+    new = NewIngredient(name, 0)
+    new.insert()
+
+    return redirect("/ingredients")
 
 
 @app.route("/recipes")
