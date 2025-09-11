@@ -15,7 +15,7 @@
 
     .ingredients {
       display: grid;
-      --item-width: min(200px, 100vw);
+      --item-width: min(200px, 95vw);
       grid-template-columns: repeat(auto-fit, var(--item-width));
       gap: .5rem;
       padding: .5rem;
@@ -29,17 +29,22 @@
       flex-direction: column;
 
       & .bg {
-        flex: 1;
         background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
+        height: var(--item-width);
       }
       & .text {
         padding: .5rem;
         display: flex;
         gap: .5rem;
         align-items: baseline;
+        flex-direction: column;
+
+        & h2 {
+          max-width: 100%;
+        }
       }
 
       text-decoration: none;
@@ -54,23 +59,23 @@
     <a href="/ingredients/new" class="btn">New</a>
   </div>
   <div class="filters">
-    {% if filter == "mine" %}
+    {% if created_by == "mine" %}
       <a class="btn" href="?">All</a>
       <p class="btn active">Created by you</p>
     {% else %}
       <p class="btn active">All</p>
-      <a class="btn" href="?filter=mine">Created by you</a>
+      <a class="btn" href="?created_by=mine">Created by you</a>
     {% endif %}
   </div>
   <div class="ingredients">
   {% for ingredient in ingredients %}
-    <a href="/ingredients/{{ ingredient.id }}" class="card">
+    <div class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>{{ ingredient.name }}</h2>
         <p>added by {{ ingredient.created_by }}</p>
       </div>
-    </a>
+    </div>
   {% endfor %}
 
   </div>

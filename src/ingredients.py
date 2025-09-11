@@ -24,16 +24,20 @@ class Ingredient:
         updated_at = updated_at
 
     @staticmethod
-    def get(db: Connection, created_by: str | None = None):
+    def get(
+        db: Connection, created_by: str | None = None, name_like: str | None = None
+    ):
+        name_like = f"%{name_like}%" if name_like is not None else None
         rows = db.execute(
             """
                 SELECT
                     id, name, created_by, created_at, updated_at
                 FROM ingredient
                 WHERE
-                    (?1 IS NULL OR created_by = ?1)
+                    (?1 IS NULL OR created_by = ?1) AND
+                    (?2 IS NULL OR name LIKE ?2)
             """,
-            [created_by],
+            [created_by, name_like],
         ).fetchall()
         db.close()
         return [Ingredient(*row) for row in rows]
@@ -58,7 +62,3 @@ class NewIngredient:
         ).fetchone()
         db.commit()
         return Ingredient(id, name, created_by, created_at, updated_at)
-
-
-def insert_ingredient():
-    pass

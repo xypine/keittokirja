@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 
 from src.ingredients import Ingredient, NewIngredient
+from src.recipes import Recipe, NewRecipe
 from src.db import connect
 from src.auth import check_credentials, create_credentials, forget_session
 
@@ -81,21 +82,22 @@ def logout():
 @app.route("/ingredients")
 def ingredients():
     user_id = session["user_id"]
-    filter = request.args.get("filter")
-    created_by = None
-    if filter == "mine":
-        created_by = user_id
-    ingredients = Ingredient.get(connect(), created_by)
-    return render_template("ingredients.html", ingredients=ingredients, filter=filter)
+    created_by = request.args.get("created_by")
+    created_by_id = None
+    if created_by == "me":
+        created_by_id = user_id
+    name_like = request.args.get("name_like")
+    recipes = Ingredient.get(connect(), created_by_id, name_like)
+    return render_template("ingredients.html", recipes=recipes, created_by=created_by)
 
 
 @app.route("/ingredients/new")
-def new_ingredient():
+def ingredients_new():
     return render_template("ingredients_new.html")
 
 
 @app.route("/ingredients/new", methods=["POST"])
-def new_message():
+def new_ingredient_handler():
     name = request.form["name"]
     user_id = session["user_id"]
 
@@ -107,7 +109,30 @@ def new_message():
 
 @app.route("/recipes")
 def recipes():
-    return render_template("recipes.html")
+    user_id = session["user_id"]
+    created_by = request.args.get("created_by")
+    created_by_id = None
+    if created_by == "me":
+        created_by_id = user_id
+    name_like = request.args.get("name_like")
+    recipes = Recipe.get(connect(), created_by_id, name_like)
+    return render_template("recipes.html", recipes=recipes, created_by=created_by)
+
+
+@app.route("/recipes/new")
+def recipes_new():
+    return render_template("recipes_new.html")
+
+
+@app.route("/recipes/new", methods=["POST"])
+def new_recipe_handler():
+    name = request.form["name"]
+    user_id = session["user_id"]
+
+    new = NewRecipe(name, user_id)
+    new.insert(connect())
+
+    return redirect(f"/recipes/{new.slug}")
 
 
 @app.route("/page")

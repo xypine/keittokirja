@@ -23,7 +23,7 @@
 
     .topPicks {
       display: grid;
-      --item-width: min(500px, 100vw);
+      --item-width: min(500px, 95vw);
       justify-content: center;
 
       grid-template-columns: repeat(auto-fit, var(--item-width));
@@ -39,7 +39,7 @@
       flex-direction: column;
 
       & .bg {
-        flex: 1;
+        height: var(--item-width);
         background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
         background-size: contain;
         background-position: center;
@@ -50,6 +50,11 @@
         display: flex;
         gap: .5rem;
         align-items: baseline;
+        flex-direction: column;
+
+        & h2 {
+          max-width: 100%;
+        }
       }
 
       text-decoration: none;

@@ -2,13 +2,20 @@
 
 {% block head %}
   <style>
-    .subtitle {
+    .content-nav {
       padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .filters {
+      padding-inline: .5rem;
     }
 
     .recipes {
       display: grid;
-      --item-width: min(500px, 100vw);
+      --item-width: min(300px, 95vw);
       grid-template-columns: repeat(auto-fit, var(--item-width));
       gap: .5rem;
       padding: .5rem;
@@ -16,13 +23,13 @@
 
     .card {
       min-width: var(--item-width);
-      min-height: 500px;
+      min-height: 250px;
 
       display: flex;
       flex-direction: column;
 
       & .bg {
-        flex: 1;
+        height: var(--item-width);
         background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
         background-size: contain;
         background-position: center;
@@ -33,6 +40,11 @@
         display: flex;
         gap: .5rem;
         align-items: baseline;
+        flex-direction: column;
+
+        & h2 {
+          max-width: 100%;
+        }
       }
 
       text-decoration: none;
@@ -42,14 +54,26 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="subtitle">{% block title %}Recipes{% endblock %}</h1>
+  <div class="content-nav">
+    <h1 class="subtitle">{% block title %}Recipes{% endblock %}</h1>
+    <a href="/recipes/new" class="btn">New</a>
+  </div>
+  <div class="filters">
+    {% if created_by == "mine" %}
+      <a class="btn" href="?">All</a>
+      <p class="btn active">Created by you</p>
+    {% else %}
+      <p class="btn active">All</p>
+      <a class="btn" href="?created_by=mine">Created by you</a>
+    {% endif %}
+  </div>
   <div class="recipes">
   {% for recipe in recipes %}
-    <a href="/ingredients/{{ recipe.id }}" class="card">
+    <a href="/recipes/{{ recipe.slug }}" class="card">
       <div class="bg"></div>
       <div class="text">
         <h2>{{ recipe.name }}</h2>
-        <p>by {{ recipe.created_by }}</p>
+        <p>added by {{ recipe.created_by }}</p>
       </div>
     </a>
   {% endfor %}
