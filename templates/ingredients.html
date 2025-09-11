@@ -2,8 +2,14 @@
 
 {% block head %}
   <style>
+    .content {
+      padding: .5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
     .content-nav {
-      padding: 1rem;
       display: flex;
       align-items: center;
       gap: .5rem;
@@ -29,11 +35,11 @@
       flex-direction: column;
 
       & .bg {
+        height: var(--item-width);
         background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
-        height: var(--item-width);
       }
       & .text {
         padding: .5rem;
@@ -54,30 +60,36 @@
 {% endblock %}
 
 {% block content %}
-  <div class="content-nav">
-    <h1 class="subtitle">{% block title %}Ingredients{% endblock %}</h1>
-    <a href="/ingredients/new" class="btn">New</a>
-  </div>
-  <div class="filters">
-    {% if created_by == "mine" %}
-      <a class="btn" href="?">All</a>
-      <p class="btn active">Created by you</p>
-    {% else %}
-      <p class="btn active">All</p>
-      <a class="btn" href="?created_by=mine">Created by you</a>
-    {% endif %}
-  </div>
-  <div class="ingredients">
-  {% for ingredient in ingredients %}
-    <div class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>{{ ingredient.name }}</h2>
-        <p>added by {{ ingredient.created_by }}</p>
-      </div>
+  <div class="content">
+    <div class="content-nav">
+      <h1 class="subtitle">{% block title %}Ingredients{% endblock %}</h1>
+      <a href="/ingredients/new" class="btn">New</a>
     </div>
-  {% endfor %}
-
+    <div class="filters">
+      <form>
+        <label>
+          <span>Search</span>
+          <input type="text" name="name_like" value="{{ name_like }}" accesskey="s" placeholder="Ingredient name" autofocus />
+        </label>
+        <button type="submit" name="created_by" value="" class="btn{% if created_by != "me" %} active{% endif %}">
+          All
+        </button>
+        <button type="submit" name="created_by" value="me" class="btn{% if created_by == "me" %} active{% endif %}">
+          Created by you
+        </button>
+      </form>
+    </div>
+    <div class="ingredients">
+    {% for ingredient in ingredients %}
+      <div class="card">
+        <div class="bg"></div>
+        <div class="text">
+          <h2>{{ ingredient.name }}</h2>
+          <p>added by {{ ingredient.creator_name or ingredient.created_by }}</p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
   </div>
 {% endblock %}
 <!-- vim: set filetype=htmldjango: -->

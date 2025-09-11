@@ -4,9 +4,10 @@ from src.ingredients import Ingredient, NewIngredient
 from src.recipes import Recipe, NewRecipe
 from src.db import connect
 from src.auth import check_credentials, create_credentials, forget_session
+from src.utils import or_empty
 
 app = Flask(__name__)
-app.secret_key = "DEVDEVDEV"
+app.secret_key = "TODOTODOTODO"
 
 
 @app.context_processor
@@ -87,8 +88,13 @@ def ingredients():
     if created_by == "me":
         created_by_id = user_id
     name_like = request.args.get("name_like")
-    recipes = Ingredient.get(connect(), created_by_id, name_like)
-    return render_template("ingredients.html", recipes=recipes, created_by=created_by)
+    ingredients = Ingredient.get(connect(), created_by_id, name_like)
+    return render_template(
+        "ingredients.html",
+        ingredients=ingredients,
+        created_by=or_empty(created_by),
+        name_like=or_empty(name_like),
+    )
 
 
 @app.route("/ingredients/new")
@@ -116,7 +122,12 @@ def recipes():
         created_by_id = user_id
     name_like = request.args.get("name_like")
     recipes = Recipe.get(connect(), created_by_id, name_like)
-    return render_template("recipes.html", recipes=recipes, created_by=created_by)
+    return render_template(
+        "recipes.html",
+        recipes=recipes,
+        created_by=or_empty(created_by),
+        name_like=or_empty(name_like),
+    )
 
 
 @app.route("/recipes/new")

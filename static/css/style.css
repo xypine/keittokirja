@@ -90,7 +90,10 @@ button {
 }
 
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
   line-height: 1;
   padding: 0.25rem 0.5rem;
 
@@ -104,12 +107,15 @@ button {
 
   &.active {
     background: light-dark(black, white);
+    border-color: light-dark(black, white);
     color: light-dark(white, black);
   }
 }
 
 input {
   padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  border-width: 0px;
 }
 
 header {

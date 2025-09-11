@@ -22,3 +22,7 @@ def slugify(text: str):
     # Strip hyphens from beginning and end
     text = text.strip("-")
     return text
+
+
+def or_empty(text: str | None):
+    return "" if text is None else text

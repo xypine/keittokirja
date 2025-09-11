@@ -11,6 +11,8 @@ class Recipe:
     created_at: datetime
     updated_at: datetime
 
+    creator_name: str | None
+
     def __init__(
         self,
         id: int,
@@ -19,6 +21,7 @@ class Recipe:
         created_by: int,
         created_at: datetime,
         updated_at: datetime,
+        creator_name: str | None,
     ):
         self.id = id
         self.name = name
@@ -26,6 +29,7 @@ class Recipe:
         self.created_by = created_by
         self.created_at = created_at
         updated_at = updated_at
+        self.creator_name = creator_name
 
     @staticmethod
     def get(
@@ -35,11 +39,12 @@ class Recipe:
         rows = db.execute(
             """
                 SELECT
-                    id, name, slug, created_by, created_at, updated_at
-                FROM recipe
+                    r.id, r.name, r.slug, r.created_by, r.created_at, r.updated_at, u.username
+                FROM recipe r
+                LEFT JOIN user u ON u.id = r.created_by
                 WHERE
-                    (?1 IS NULL OR created_by = ?1) AND
-                    (?2 IS NULL OR name LIKE ?2)
+                    (?1 IS NULL OR r.created_by = ?1) AND
+                    (?2 IS NULL OR r.name LIKE ?2)
             """,
             [created_by, name_like],
         ).fetchall()

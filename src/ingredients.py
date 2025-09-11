@@ -9,6 +9,8 @@ class Ingredient:
     created_at: datetime
     updated_at: datetime
 
+    creator_name: str | None
+
     def __init__(
         self,
         id: int,
@@ -16,12 +18,14 @@ class Ingredient:
         created_by: int,
         created_at: datetime,
         updated_at: datetime,
+        creator_name: str | None,
     ):
         self.id = id
         self.name = name
         self.created_by = created_by
         self.created_at = created_at
         updated_at = updated_at
+        self.creator_name = creator_name
 
     @staticmethod
     def get(
@@ -31,11 +35,12 @@ class Ingredient:
         rows = db.execute(
             """
                 SELECT
-                    id, name, created_by, created_at, updated_at
-                FROM ingredient
+                    i.id, i.name, i.created_by, i.created_at, i.updated_at, u.username
+                FROM ingredient i
+                LEFT JOIN user u ON u.id = i.created_by
                 WHERE
-                    (?1 IS NULL OR created_by = ?1) AND
-                    (?2 IS NULL OR name LIKE ?2)
+                    (?1 IS NULL OR i.created_by = ?1) AND
+                    (?2 IS NULL OR i.name LIKE ?2)
             """,
             [created_by, name_like],
         ).fetchall()
