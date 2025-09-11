@@ -15,15 +15,15 @@
 
     .ingredients {
       display: grid;
-      --item-width: min(500px, 100vw);
-      grid-template-columns: repeat(auto-fit, minmax(var(--item-width), 1fr));
+      --item-width: min(200px, 100vw);
+      grid-template-columns: repeat(auto-fit, var(--item-width));
       gap: .5rem;
       padding: .5rem;
     }
 
     .card {
       min-width: var(--item-width);
-      min-height: 500px;
+      min-height: 250px;
 
       display: flex;
       flex-direction: column;

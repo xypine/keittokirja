@@ -24,8 +24,9 @@
     .topPicks {
       display: grid;
       --item-width: min(500px, 100vw);
+      justify-content: center;
 
-      grid-template-columns: repeat(auto-fit, minmax(var(--item-width), 1fr));
+      grid-template-columns: repeat(auto-fit, var(--item-width));
       gap: .5rem;
       padding: .5rem;
     }
