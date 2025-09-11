@@ -1,4 +1,3 @@
-from src.db import connect
 from datetime import datetime
 from sqlite3 import Connection
 
@@ -25,10 +24,16 @@ class Ingredient:
         updated_at = updated_at
 
     @staticmethod
-    def get_all():
-        db = connect()
+    def get(db: Connection, created_by: str | None = None):
         rows = db.execute(
-            "SELECT id, name, created_by, created_at, updated_at FROM ingredient"
+            """
+                SELECT
+                    id, name, created_by, created_at, updated_at
+                FROM ingredient
+                WHERE
+                    (?1 IS NULL OR created_by = ?1)
+            """,
+            [created_by],
         ).fetchall()
         db.close()
         return [Ingredient(*row) for row in rows]

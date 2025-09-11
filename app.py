@@ -80,8 +80,13 @@ def logout():
 
 @app.route("/ingredients")
 def ingredients():
-    ingredients = Ingredient.get_all()
-    return render_template("ingredients.html", ingredients=ingredients)
+    user_id = session["user_id"]
+    filter = request.args.get("filter")
+    created_by = None
+    if filter == "mine":
+        created_by = user_id
+    ingredients = Ingredient.get(connect(), created_by)
+    return render_template("ingredients.html", ingredients=ingredients, filter=filter)
 
 
 @app.route("/ingredients/new")

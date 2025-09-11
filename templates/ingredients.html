@@ -9,6 +9,10 @@
       gap: .5rem;
     }
 
+    .filters {
+      padding-inline: .5rem;
+    }
+
     .ingredients {
       display: grid;
       --item-width: min(500px, 100vw);
@@ -48,6 +52,15 @@
   <div class="content-nav">
     <h1 class="subtitle">{% block title %}Ingredients{% endblock %}</h1>
     <a href="/ingredients/new" class="btn">New</a>
+  </div>
+  <div class="filters">
+    {% if filter == "mine" %}
+      <a class="btn" href="?">All</a>
+      <p class="btn active">Created by you</p>
+    {% else %}
+      <p class="btn active">All</p>
+      <a class="btn" href="?filter=mine">Created by you</a>
+    {% endif %}
   </div>
   <div class="ingredients">
   {% for ingredient in ingredients %}
