@@ -1,5 +1,6 @@
 from src.db import connect
 from datetime import datetime
+from sqlite3 import Connection
 
 
 class Ingredient:
@@ -41,8 +42,7 @@ class NewIngredient:
         self.name = name
         self.created_by = created_by
 
-    def insert(self) -> Ingredient:
-        db = connect()
+    def insert(self, db: Connection) -> Ingredient:
         [id, name, created_by, created_at, updated_at] = db.execute(
             """
             INSERT INTO ingredient

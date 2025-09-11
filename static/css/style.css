@@ -118,6 +118,12 @@ header {
   flex-wrap: wrap;
 }
 
+.sessionInfo {
+  flex: 1;
+  display: flex;
+  justify-content: end;
+}
+
 nav {
   padding-bottom: 0.5rem;
 

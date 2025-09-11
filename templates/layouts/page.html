@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html' %}
+
 {% block body %}
     <header>
         <div class="headerBar">
@@ -8,6 +9,9 @@
                 </a>
             </h1>
             {% include 'components/navbar.html' %}
+            <div class="sessionInfo">
+                {% include 'components/auth-status.html' %}
+            </div>
         </div>
         <div>
             {% block header %}{% endblock %}

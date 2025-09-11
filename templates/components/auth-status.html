@@ -1,0 +1,21 @@
+{% block head %}
+<style>
+    .authMenu {
+      display: flex;
+      gap: .5rem;
+    }
+</style>
+{% endblock %}
+
+<div class="authMenu">
+    {% if session["username"] %}
+        <p>
+            Logged in as {{ session.username }}
+        </p>
+        <a class="btn" href="/logout">Log out</a>
+    {% else %}
+        <a class="btn" href="/login">Log in</a>
+        <a class="btn" href="/register">Register</a>
+    {% endif %}
+</div>
+<!-- vim: set filetype=htmldjango: -->

@@ -2,6 +2,10 @@
 
 {% block head %}
   <style>
+    .headerBar {
+      padding: 1rem;
+    }
+
     .searchContainer {
       flex: 1;
 
@@ -54,6 +58,11 @@
 {% endblock %}
 
 {% block body %}
+  <div class="headerBar">
+      <div class="sessionInfo">
+          {% include 'components/auth-status.html' %}
+      </div>
+  </div>
   <div class="searchContainer">
     <h1 class="logo">Keittokirja</h1>
     <form class="search">

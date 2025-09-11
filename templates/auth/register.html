@@ -1,0 +1,64 @@
+{% extends 'layouts/page.html' %}
+
+{% block head %}
+  <style>
+    .subtitle {
+      padding: .5rem;
+    }
+
+    .form-container {
+      flex: 1;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    fieldset {
+      width: fit-content;
+    }
+
+    form {
+      display: flex;
+      gap: .5rem;
+      padding: .5rem;
+      margin: .5rem;
+      flex-direction: column;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    button {
+      align-self: end;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="form-container">
+    <fieldset class="card">
+      <legend>
+        <h2 class="subtitle">{% block title %}Register{% endblock %}</h2>
+      </legend>
+      <form method="POST">
+        <label>
+          <span>username</span>
+          <input name="username" type="text" autofocus />
+        </label>
+        <label>
+          <span>password</span>
+          <input name="password1" type="password" autofocus />
+        </label>
+        <label>
+          <span>password (again)</span>
+          <input name="password2" type="password" autofocus />
+        </label>
+        <button type="submit" class="btn">Create User</button>
+      </form>
+    </fieldset>
+  </div>
+{% endblock %}
+<!-- vim: set filetype=htmldjango: -->
