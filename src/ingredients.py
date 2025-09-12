@@ -66,4 +66,6 @@ class NewIngredient:
             [self.name, self.created_by],
         ).fetchone()
         db.commit()
-        return Ingredient(id, name, created_by, created_at, updated_at)
+        return Ingredient(
+            id, name, created_by, created_at, updated_at, creator_name=None
+        )

@@ -1,13 +1,15 @@
+from os import environ
 from flask import Flask, render_template, request, redirect, session
 
 from src.ingredients import Ingredient, NewIngredient
-from src.recipes import Recipe, NewRecipe
+from src.recipes import Recipe, NewRecipe, RecipeListing
 from src.db import connect
 from src.auth import check_credentials, create_credentials, forget_session
+from src.requirements import NewRequirement, Requirement
 from src.utils import or_empty
 
 app = Flask(__name__)
-app.secret_key = "TODOTODOTODO"
+app.secret_key = environ["SECRET_KEY"]
 
 
 @app.context_processor
@@ -121,7 +123,7 @@ def recipes():
     if created_by == "me":
         created_by_id = user_id
     name_like = request.args.get("name_like")
-    recipes = Recipe.get(connect(), created_by_id, name_like)
+    recipes = RecipeListing.get(connect(), created_by_id, name_like)
     return render_template(
         "recipes.html",
         recipes=recipes,
@@ -143,7 +145,52 @@ def new_recipe_handler():
     new = NewRecipe(name, user_id)
     new.insert(connect())
 
-    return redirect(f"/recipes/{new.slug}")
+    return redirect(f"/recipes/{new.slug}/edit")
+
+
+@app.route("/recipes/<slug>")
+def recipe(slug: str):
+    user_id = session["user_id"]
+    recipe = Recipe.get_by_slug(connect(), slug)
+    return render_template(
+        "recipe.html", recipe=recipe, own=(recipe.created_by == user_id)
+    )
+
+
+@app.route("/recipes/<slug>/edit")
+def recipe_edit(slug: str):
+    recipe = Recipe.get_by_slug(connect(), slug)
+    recipes = RecipeListing.get(connect())
+    ingredients = Ingredient.get(connect())
+    return render_template(
+        "recipe_edit.html", recipe=recipe, recipes=recipes, ingredients=ingredients
+    )
+
+
+@app.route("/recipes/<recipe_id>/ingredients", methods=["POST"])
+def new_recipe_ingredient_handler(recipe_id: int):
+    user_id = session["user_id"]
+    recipe_slug = request.form["recipe_slug"]
+    amount = request.form["amount"]
+    ingredient_id = request.form["ingredient_id"]
+    ingredient_recipe_id = request.form["ingredient_recipe_id"]
+
+    new = NewRequirement(
+        user_id, recipe_id, amount, ingredient_id, ingredient_recipe_id
+    )
+    new.insert(connect())
+
+    return redirect(f"/recipes/{recipe_slug}/edit")
+
+
+@app.route("/recipes/<recipe_id>/ingredients/<requirement_id>/delete", methods=["POST"])
+def delete_recipe_ingredient_handler(recipe_id: int, requirement_id: int):
+    user_id = session["user_id"]
+    recipe_slug = request.form["recipe_slug"]
+
+    Requirement.delete(connect(), user_id, recipe_id, requirement_id)
+
+    return redirect(f"/recipes/{recipe_slug}/edit")
 
 
 @app.route("/page")

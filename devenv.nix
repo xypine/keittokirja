@@ -7,6 +7,7 @@
 {
   env = {
     DATABASE_URL = "dev.db";
+    SECRET_KEY = "DEVDEVDEV";
   };
 
   # https://devenv.sh/languages/

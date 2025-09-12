@@ -1,0 +1,93 @@
+{% extends 'layouts/page.html' %}
+
+{% block head %}
+  <style>
+    .content {
+      padding: .5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .content-nav {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .filters {
+      padding-inline: .5rem;
+    }
+
+    .recipes {
+      display: grid;
+      --item-width: min(300px, 95vw);
+      grid-template-columns: repeat(auto-fit, var(--item-width));
+      gap: .5rem;
+      padding: .5rem;
+    }
+
+    .card {
+      min-width: var(--item-width);
+      min-height: 250px;
+
+      display: flex;
+      flex-direction: column;
+
+      & .bg {
+        height: var(--item-width);
+        background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & .text {
+        padding: .5rem;
+        display: flex;
+        gap: .5rem;
+        align-items: baseline;
+        flex-direction: column;
+
+        & h2 {
+          max-width: 100%;
+        }
+      }
+
+      text-decoration: none;
+      color: currentColor;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="content">
+    <div class="content-nav">
+      <h1 class="subtitle">{% block title %}{{ recipe.name }}{% endblock %}</h1>
+      {% if own %}
+        <a href="/recipes/{{ recipe.slug }}/edit">Edit</a>
+      {% endif %}
+    </div>
+    <div class="">
+      <h2>Ingredients</h2>
+      {% if recipe.ingredients %}
+        <table>
+          <thead>
+            <tr>
+              <th>amount</th>
+              <th>name</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for ingredient in recipe.ingredients %}
+            <tr>
+              <td>{{ ingredient.amount }}</td>
+              <td>{{ ingredient.name }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+<!-- vim: set filetype=htmldjango: -->

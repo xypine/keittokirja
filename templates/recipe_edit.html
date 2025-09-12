@@ -1,0 +1,130 @@
+{% extends 'layouts/page.html' %}
+
+{% block head %}
+  <style>
+    .content {
+      padding: .5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .content-nav {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .filters {
+      padding-inline: .5rem;
+    }
+
+    .recipes {
+      display: grid;
+      --item-width: min(300px, 95vw);
+      grid-template-columns: repeat(auto-fit, var(--item-width));
+      gap: .5rem;
+      padding: .5rem;
+    }
+
+    .card {
+      display: flex;
+      gap: .5rem;
+      padding: .5rem;
+      margin: .5rem;
+      flex-direction: column;
+
+      & label {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    fieldset {
+      width: fit-content;
+    }
+
+    select {
+      padding: 0.15rem 0.5rem;
+    }
+
+    .ingredient-selector {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="content">
+    <div class="content-nav">
+      <h1 class="subtitle">{% block title %}Edit Recipe{% endblock %}</h1>
+    </div>
+    <form>
+      <input type="text" name="name" value="{{ recipe.name }}">
+    </form>
+    <fieldset>
+      <legend>Ingredients</legend>
+      {% if recipe.ingredients %}
+        <table>
+          <thead>
+            <tr>
+              <th>amount</th>
+              <th>name</th>
+              <th>actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for ingredient in recipe.ingredients %}
+            <tr id="{{ ingredient.id }}">
+              <td>{{ ingredient.amount }}</td>
+              <td>{{ ingredient.name }}</td>
+              <td>
+                <form method="POST" action="/recipes/{{ recipe.id }}/ingredients/{{ ingredient.id }}/delete">
+                  <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+                  <button type="submit" class="btn">remove</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+      <form method="POST" action="/recipes/{{ recipe.id }}/ingredients">
+        <fieldset class="card">
+          <legend>Add requirement</legend>
+          <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+          <div class="ingredient-selector">
+            <label>
+              <span>Ingredient</span>
+              <select name="ingredient_id">
+                <option selected value="">Not Selected</option>
+                {% for ingredient in ingredients %}
+                  <option value="{{ ingredient.id }}">{{ ingredient.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <p>or</p>
+            <label>
+              <span>Another recipe</span>
+              <select name="ingredient_recipe_id">
+                <option selected value="">Not Selected</option>
+                {% for recipe in recipes %}
+                  <option value="{{ recipe.id }}">{{ recipe.name }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          </div>
+          <small>(pick one)</small>
+          <label>
+            <span>amount</span>
+            <input type="text" name="amount" />
+          </label>
+          <button type="submit">Add</button>
+        </fieldset>
+      </form>
+    </fieldset>
+  </div>
+{% endblock %}
+<!-- vim: set filetype=htmldjango: -->
