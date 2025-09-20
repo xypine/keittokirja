@@ -8,6 +8,7 @@
   env = {
     DATABASE_URL = "dev.db";
     SECRET_KEY = "DEVDEVDEV";
+    VERIFY_CONTACT = "joe@example.com";
   };
 
   # https://devenv.sh/languages/

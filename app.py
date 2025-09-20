@@ -4,13 +4,21 @@ from flask import Flask, render_template, request, redirect, session
 from src.ingredients import Ingredient, NewIngredient
 from src.recipes import Recipe, NewRecipe, RecipeListing
 from src.db import connect
-from src.auth import check_credentials, create_credentials, forget_session
+from src.auth import (
+    CREDENTIAL_CHECK_OK,
+    CREDENTIAL_CHECK_UNVERIFIED,
+    check_credentials,
+    create_credentials,
+    forget_session,
+)
 from src.requirements import NewRequirement, Requirement
 from src.steps import NewStep, Step
 from src.utils import or_empty
 
 app = Flask(__name__)
 app.secret_key = environ["SECRET_KEY"]
+
+VERIFY_CONTACT = environ["VERIFY_CONTACT"]
 
 
 @app.context_processor
@@ -52,8 +60,11 @@ def login():
     password = request.form["password"]
 
     result = check_credentials(connect(), username, password)
-    if result:
+    if result == CREDENTIAL_CHECK_OK:
         return redirect("/")
+    elif result == CREDENTIAL_CHECK_UNVERIFIED:
+        return f"Your user is still unverified, please contact {VERIFY_CONTACT} to get your account verified"
+
     return "Wrong username or password"
 
 
@@ -73,7 +84,7 @@ def register():
 
     result = create_credentials(connect(), username, password1)
     if result:
-        return "User created, you can now log in"
+        return f"User created, you can log in after your account has been verified. Contact {VERIFY_CONTACT} to get your account verified."
 
     return "Error creating user, maybe the username is already taken?"
 

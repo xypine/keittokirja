@@ -22,24 +22,33 @@ def create_credentials(db: Connection, username: str, password: str):
     return False
 
 
+CREDENTIAL_CHECK_OK = 0
+CREDENTIAL_CHECK_WRONG_DETAILS = 1
+CREDENTIAL_CHECK_ERROR = 2
+CREDENTIAL_CHECK_UNVERIFIED = 3
+
+
 def check_credentials(db: Connection, username: str, password: str):
     try:
-        [user_id, password_hash] = db.execute(
+        [user_id, password_hash, verified] = db.execute(
             """
-            SELECT id, password_hash FROM user WHERE username = ?
+            SELECT id, password_hash, verified FROM user WHERE username = ?
             """,
             [username],
         ).fetchone()
 
         if check_password_hash(password_hash, password):
+            if not verified:
+                return CREDENTIAL_CHECK_UNVERIFIED
+
             session["user_id"] = user_id
             session["username"] = username
-            return True
+            return CREDENTIAL_CHECK_OK
     except Exception as e:
         print("Error logging in:", e)
-        pass
+        return CREDENTIAL_CHECK_ERROR
 
-    return False
+    return CREDENTIAL_CHECK_WRONG_DETAILS
 
 
 def forget_session():
