@@ -6,6 +6,7 @@ from src.recipes import Recipe, NewRecipe, RecipeListing
 from src.db import connect
 from src.auth import check_credentials, create_credentials, forget_session
 from src.requirements import NewRequirement, Requirement
+from src.steps import NewStep, Step
 from src.utils import or_empty
 
 app = Flask(__name__)
@@ -190,6 +191,47 @@ def delete_recipe_ingredient_handler(recipe_id: int, requirement_id: int):
     recipe_slug = request.form["recipe_slug"]
 
     Requirement.delete(connect(), requirement_id, recipe_id, user_id)
+
+    return redirect(f"/recipes/{recipe_slug}/edit")
+
+
+@app.route("/recipes/<recipe_id>/steps", methods=["POST"])
+def new_recipe_step_handler(recipe_id: int):
+    user_id = session["user_id"]
+    recipe_slug = request.form["recipe_slug"]
+    summary = request.form["summary"]
+    details = request.form["details"]
+
+    if len(summary) < 3:
+        raise Exception("summary must be at least 3 characters long")
+
+    new = NewStep(user_id, recipe_id, summary, details)
+    new.insert(connect())
+
+    return redirect(f"/recipes/{recipe_slug}/edit")
+
+
+@app.route("/recipes/<recipe_id>/steps/<step_id>/edit", methods=["POST"])
+def edit_recipe_step_handler(recipe_id: int, step_id: int):
+    user_id = session["user_id"]
+    recipe_slug = request.form["recipe_slug"]
+    summary = request.form["summary"]
+    details = request.form["details"]
+
+    if len(summary) < 3:
+        raise Exception("summary must be at least 3 characters long")
+
+    Step(step_id, recipe_id, summary, details).put(connect(), user_id)
+
+    return redirect(f"/recipes/{recipe_slug}/edit")
+
+
+@app.route("/recipes/<recipe_id>/steps/<step_id>/delete", methods=["POST"])
+def delete_recipe_step_handler(recipe_id: int, step_id: int):
+    user_id = session["user_id"]
+    recipe_slug = request.form["recipe_slug"]
+
+    Step.delete(connect(), step_id, recipe_id, user_id)
 
     return redirect(f"/recipes/{recipe_slug}/edit")
 

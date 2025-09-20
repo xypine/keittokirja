@@ -30,6 +30,8 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 
+  background-color: light-dark(#f7f4ff, #1c1a1e);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -100,10 +102,12 @@ button {
   text-decoration: none;
   color: currentColor;
 
-  border: 1px solid currentColor;
   border-radius: 0.25rem;
 
   cursor: pointer;
+
+  background: light-dark(#eee, #222);
+  border: 1px solid light-dark(#ddd, #333);
 
   &.active {
     background: light-dark(black, white);
@@ -112,11 +116,21 @@ button {
   }
 }
 
-input {
+input,
+textarea {
   padding: 0.15rem 0.5rem;
   border-radius: 0.25rem;
   border-width: 0px;
   background: light-dark(#eee, #111);
+}
+
+fieldset {
+  border: 1px dashed light-dark(#d2d2d2, #3c3838);
+  border-radius: 0.25rem;
+
+  & legend {
+    padding: 0 0.25rem;
+  }
 }
 
 td,
@@ -127,6 +141,26 @@ th {
 header {
   padding: 0.5rem 1rem;
   border-bottom: 1px solid currentColor;
+  background-color: light-dark(#fbfbfb, #131313);
+}
+
+summary {
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6 {
+    display: inline-block;
+  }
+}
+
+ol {
+  list-style-position: inside;
+
+  & > * > * {
+    display: inline-block;
+  }
 }
 
 .headerBar {
@@ -169,7 +203,7 @@ nav {
 }
 
 .card {
-  border: 1px solid #3e3a32;
-  background: #1c1c1c;
+  border: 1px solid light-dark(#ececec, #3e3a32);
+  background: light-dark(#f7f7f7, #1c1c1c);
   border-radius: 0.25rem;
 }

@@ -58,7 +58,7 @@ class NewRequirement:
                 self.ingredient_recipe_id,
                 self.created_by,
             ],
-        ).fetchone()
+        )
         db.commit()
 
 
@@ -90,7 +90,6 @@ class Requirement:
 
     @staticmethod
     def delete(db: Connection, id: int, recipe_id: int, user_id: int):
-        print(f"id {id} recipe_id {recipe_id} user_id {user_id}")
         db.execute(
             """
             DELETE FROM recipe_requirement
@@ -100,5 +99,5 @@ class Requirement:
                 AND created_by = ?
             """,
             [id, recipe_id, user_id],
-        ).fetchone()
+        )
         db.commit()

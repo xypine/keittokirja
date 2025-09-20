@@ -69,6 +69,27 @@
           </tbody>
         </table>
       {% endif %}
+      <h2>Steps</h2>
+      {% if recipe.steps %}
+        <ol>
+          {% for step in recipe.steps %}
+            <li>
+              {% if step.details %}
+              <details>
+                <summary>
+                  <h2>{{ step.summary }}</h2>
+                </summary>
+                <div>
+                  {{ step.details }}
+                </div>
+              </details>
+              {% else %}
+                <h2>{{ step.summary }}</h2>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

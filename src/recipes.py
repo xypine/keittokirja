@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlite3 import Connection
 from typing import List
+from src.steps import Step
 from src.utils import slugify
 from src.requirements import Requirement
 
@@ -53,6 +54,7 @@ class Recipe:
     updated_at: datetime
     creator_name: str
     ingredients: List[Requirement]
+    steps: List[Step]
 
     def __init__(
         self,
@@ -64,6 +66,7 @@ class Recipe:
         updated_at: datetime,
         creator_name: str,
         ingredients: List[Requirement],
+        steps: List[Step],
     ):
         self.id = id
         self.name = name
@@ -73,35 +76,62 @@ class Recipe:
         updated_at = updated_at
         self.creator_name = creator_name
         self.ingredients = ingredients
+        self.steps = steps
 
     @staticmethod
     def get_by_slug(db: Connection, slug: str):
         rows = db.execute(
             """
+                WITH correct_recipe AS (
+                    SELECT * FROM recipe WHERE slug = ?1
+                ),
+                correct_requirements AS (
+                    SELECT
+                        rr.*,
+                        COALESCE(ingredient.name, ir.name) AS "rname",
+                        ir.slug AS "slug"
+                    FROM recipe_requirement rr
+                    JOIN correct_recipe ON rr.recipe_id = correct_recipe.id
+                    LEFT JOIN ingredient ON ingredient.id = rr.ingredient_id
+                    LEFT JOIN recipe ir ON ir.id = rr.ingredient_recipe_id
+                ),
+                correct_steps AS (
+                  SELECT *
+                  FROM recipe_step rs
+                  JOIN correct_recipe ON rs.recipe_id = correct_recipe.id
+                )
                 SELECT
                     r.id, r.name, r.slug, r.created_by, r.created_at, r.updated_at, u.username,
-                    rr.id,
-                    COALESCE(
-                        (SELECT name FROM ingredient WHERE ingredient.id = rr.ingredient_id),
-                        (SELECT name FROM recipe WHERE recipe.id = rr.ingredient_recipe_id)
-                    ),
-                    rr.amount, rr.extra_info, rr.ingredient_id, (SELECT slug FROM recipe WHERE recipe.id = rr.ingredient_recipe_id)
-                FROM recipe r
-                LEFT JOIN recipe_requirement rr ON rr.recipe_id = r.id
+                    rr.id, rr.rname, rr.amount, rr.extra_info, rr.ingredient_id, rr.slug,
+                    rs.id, rs.summary, rs.details
+                FROM correct_recipe r
+                LEFT JOIN correct_requirements rr
+                LEFT JOIN correct_steps rs
                 LEFT JOIN user u ON u.id = r.created_by
-                WHERE
-                    r.slug = ?1
             """,
             [slug],
         ).fetchall()
         [id, name, slug, created_by, created_at, updated_at, creator_name] = rows[0][:7]
 
-        def whereRequirement():
+        def ingredientGenerator():
+            seen_ids = []
             for r in rows:
-                if r[7]:
+                id = r[7]
+                if r[7] and not (id in seen_ids):
                     yield Requirement(r[7], r[8], r[9], r[10], r[11], r[12])
+                    seen_ids.append(id)
 
-        ingredients = list(whereRequirement())
+        ingredients = list(ingredientGenerator())
+
+        def stepGenerator():
+            seen_ids = []
+            for r in rows:
+                id = r[13]
+                if r[0] and id and not (id in seen_ids):
+                    yield Step(id, r[0], r[14], r[15])
+                    seen_ids.append(id)
+
+        steps = list(stepGenerator())
 
         return Recipe(
             id,
@@ -112,6 +142,7 @@ class Recipe:
             updated_at,
             creator_name,
             ingredients,
+            steps,
         )
 
 

@@ -42,6 +42,12 @@
         display: flex;
         flex-direction: column;
       }
+
+      & form {
+        display: flex;
+        gap: .25rem;
+        flex-direction: column;
+      }
     }
 
     fieldset {
@@ -57,6 +63,10 @@
       align-items: center;
       gap: 1rem;
     }
+
+    .rm {
+      align-self: end;
+    }
   </style>
 {% endblock %}
 
@@ -64,6 +74,7 @@
   <div class="content">
     <div class="content-nav">
       <h1 class="subtitle">{% block title %}Edit Recipe{% endblock %}</h1>
+      <a href="/recipes/{{ recipe.slug }}">Back</a>
     </div>
     <form>
       <input type="text" name="name" value="{{ recipe.name }}">
@@ -135,7 +146,51 @@
             <span>comment <small>(optional)</small></span>
             <input type="text" name="extra_info" />
           </label>
-          <button type="submit">Add</button>
+          <button type="submit" class="btn">Add</button>
+        </fieldset>
+      </form>
+    </fieldset>
+    <fieldset>
+      <legend>Steps</legend>
+      {% if recipe.steps %}
+        <div>
+          {% for step in recipe.steps %}
+            <fieldset class="card" id="{{ step.id }}">
+              <legend>{{ step.summary }}</legend>
+              <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/delete">
+                <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+                <button type="submit" class="btn rm">Remove</button>
+              </form>
+              <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/edit">
+                  <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+                  <label>
+                    <span>summary</span>
+                    <input type="text" name="summary" placeholder="Chop your chopsticks" value="{{ step.summary }}" />
+                  </label>
+                  <label>
+                    <span>details</span>
+                    <textarea type="text" name="details" cols="80" rows="10">{{step.details}}</textarea>
+                  </label>
+                  <button type="submit" class="btn">Save</button>
+              </form>
+            </fieldset>
+          {% endfor %}
+        </div>
+        <hr />
+      {% endif %}
+      <form method="POST" action="/recipes/{{ recipe.id }}/steps">
+        <fieldset class="card">
+          <legend>New step</legend>
+          <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+          <label>
+            <span>summary</span>
+            <input type="text" name="summary" placeholder="Chop your chopsticks" />
+          </label>
+          <label>
+            <span>details</span>
+            <textarea type="text" name="details" cols="80" rows="10"></textarea>
+          </label>
+          <button type="submit" class="btn">Add</button>
         </fieldset>
       </form>
     </fieldset>

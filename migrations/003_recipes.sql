@@ -41,3 +41,17 @@ WHERE ingredient_id IS NOT NULL;
 CREATE UNIQUE INDEX idx_recipe_ingredient_recipe
 ON recipe_requirement(recipe_id, ingredient_recipe_id)
 WHERE ingredient_recipe_id IS NOT NULL;
+
+CREATE TABLE recipe_step (
+	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	recipe_id INTEGER NOT NULL,
+	summary TEXT NOT NULL,
+	details TEXT,
+
+	created_by INTEGER NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	FOREIGN KEY (recipe_id) REFERENCES recipe (id),
+	FOREIGN KEY (created_by) REFERENCES users (id)
+)
