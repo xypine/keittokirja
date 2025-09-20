@@ -85,7 +85,7 @@ class Recipe:
                         (SELECT name FROM ingredient WHERE ingredient.id = rr.ingredient_id),
                         (SELECT name FROM recipe WHERE recipe.id = rr.ingredient_recipe_id)
                     ),
-                    rr.amount, rr.ingredient_id, (SELECT slug FROM recipe WHERE recipe.id = rr.ingredient_recipe_id)
+                    rr.amount, rr.extra_info, rr.ingredient_id, (SELECT slug FROM recipe WHERE recipe.id = rr.ingredient_recipe_id)
                 FROM recipe r
                 LEFT JOIN recipe_requirement rr ON rr.recipe_id = r.id
                 LEFT JOIN user u ON u.id = r.created_by
@@ -99,7 +99,7 @@ class Recipe:
         def whereRequirement():
             for r in rows:
                 if r[7]:
-                    yield Requirement(r[7], r[8], r[9], r[10], r[11])
+                    yield Requirement(r[7], r[8], r[9], r[10], r[11], r[12])
 
         ingredients = list(whereRequirement())
 

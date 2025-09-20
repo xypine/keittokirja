@@ -28,10 +28,14 @@
     }
 
     .card {
+      margin: .5rem;
+    }
+
+    fieldset.card {
+      padding: .5rem;
+
       display: flex;
       gap: .5rem;
-      padding: .5rem;
-      margin: .5rem;
       flex-direction: column;
 
       & label {
@@ -67,12 +71,13 @@
     <fieldset>
       <legend>Ingredients</legend>
       {% if recipe.ingredients %}
-        <table>
+        <table class="card">
           <thead>
             <tr>
               <th>amount</th>
               <th>name</th>
-              <th>actions</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -80,6 +85,11 @@
             <tr id="{{ ingredient.id }}">
               <td>{{ ingredient.amount }}</td>
               <td>{{ ingredient.name }}</td>
+              <td>
+                {% if ingredient.extra_info %}
+                    <span>{{ ingredient.extra_info }}</span>
+                {% endif %}
+              </td>
               <td>
                 <form method="POST" action="/recipes/{{ recipe.id }}/ingredients/{{ ingredient.id }}/delete">
                   <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
@@ -97,7 +107,7 @@
           <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
           <div class="ingredient-selector">
             <label>
-              <span>Ingredient</span>
+              <span>Raw Ingredient</span>
               <select name="ingredient_id">
                 <option selected value="">Not Selected</option>
                 {% for ingredient in ingredients %}
@@ -116,10 +126,14 @@
               </select>
             </label>
           </div>
-          <small>(pick one)</small>
+          <!-- <small>(pick one)</small> -->
           <label>
             <span>amount</span>
             <input type="text" name="amount" />
+          </label>
+          <label>
+            <span>comment <small>(optional)</small></span>
+            <input type="text" name="extra_info" />
           </label>
           <button type="submit">Add</button>
         </fieldset>

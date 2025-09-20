@@ -26,36 +26,6 @@
       gap: .5rem;
       padding: .5rem;
     }
-
-    .card {
-      min-width: var(--item-width);
-      min-height: 250px;
-
-      display: flex;
-      flex-direction: column;
-
-      & .bg {
-        height: var(--item-width);
-        background: url('https://firstbenefits.org/wp-content/uploads/2017/10/placeholder-1024x1024.png');
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
-      & .text {
-        padding: .5rem;
-        display: flex;
-        gap: .5rem;
-        align-items: baseline;
-        flex-direction: column;
-
-        & h2 {
-          max-width: 100%;
-        }
-      }
-
-      text-decoration: none;
-      color: currentColor;
-    }
   </style>
 {% endblock %}
 
@@ -70,11 +40,13 @@
     <div class="">
       <h2>Ingredients</h2>
       {% if recipe.ingredients %}
-        <table>
+        <table class="card">
           <thead>
             <tr>
               <th>amount</th>
               <th>name</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -82,6 +54,16 @@
             <tr>
               <td>{{ ingredient.amount }}</td>
               <td>{{ ingredient.name }}</td>
+              <td>
+                {% if ingredient.recipe_link %}
+                    <a href="{{ ingredient.recipe_link }}">recipe</a>
+                {% endif %}
+              </td>
+              <td>
+                {% if ingredient.extra_info %}
+                    <span>{{ ingredient.extra_info }}</span>
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
           </tbody>

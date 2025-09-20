@@ -6,6 +6,7 @@ class NewRequirement:
     created_by: int
     recipe_id: int
     amount: str
+    extra_info: Optional[str]
     ingredient_id: Optional[int]
     ingredient_recipe_id: Optional[int]
 
@@ -14,12 +15,14 @@ class NewRequirement:
         created_by: int,
         recipe_id: int,
         amount: str,
+        extra_info: Optional[str],
         ingredient_id: Optional[str],
         ingredient_recipe_id: Optional[str],
     ) -> None:
         self.created_by = created_by
         self.recipe_id = recipe_id
         self.amount = amount
+        self.extra_info = extra_info
 
         match [bool(ingredient_id), bool(ingredient_recipe_id)]:
             case [True, True]:
@@ -45,12 +48,13 @@ class NewRequirement:
         db.execute(
             """
             INSERT INTO recipe_requirement
-            (recipe_id, ingredient_id, amount, ingredient_recipe_id, created_by) VALUES (?, ?, ?, ?, ?)
+            (recipe_id, ingredient_id, amount, extra_info, ingredient_recipe_id, created_by) VALUES (?, ?, ?, ?, ?, ?)
             """,
             [
                 self.recipe_id,
                 self.ingredient_id,
                 self.amount,
+                self.extra_info,
                 self.ingredient_recipe_id,
                 self.created_by,
             ],
@@ -62,6 +66,7 @@ class Requirement:
     id: int
     name: str
     amount: str
+    extra_info: Optional[str]
     ingredient_link: Optional[str]
     recipe_link: Optional[str]
 
@@ -70,12 +75,14 @@ class Requirement:
         id: int,
         name: str,
         amount: str,
+        extra_info: Optional[str],
         ingredient_id: Optional[int],
         ingredient_recipe_slug: Optional[str],
     ):
         self.id = id
         self.name = name
         self.amount = amount
+        self.extra_info = extra_info
         if ingredient_id:
             self.ingredient_link = f"/ingredients#{ingredient_id}"
         if ingredient_recipe_slug:
@@ -83,6 +90,7 @@ class Requirement:
 
     @staticmethod
     def delete(db: Connection, id: int, recipe_id: int, user_id: int):
+        print(f"id {id} recipe_id {recipe_id} user_id {user_id}")
         db.execute(
             """
             DELETE FROM recipe_requirement

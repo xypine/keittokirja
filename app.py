@@ -172,11 +172,12 @@ def new_recipe_ingredient_handler(recipe_id: int):
     user_id = session["user_id"]
     recipe_slug = request.form["recipe_slug"]
     amount = request.form["amount"]
+    extra_info = request.form["extra_info"]
     ingredient_id = request.form["ingredient_id"]
     ingredient_recipe_id = request.form["ingredient_recipe_id"]
 
     new = NewRequirement(
-        user_id, recipe_id, amount, ingredient_id, ingredient_recipe_id
+        user_id, recipe_id, amount, extra_info, ingredient_id, ingredient_recipe_id
     )
     new.insert(connect())
 
@@ -188,7 +189,7 @@ def delete_recipe_ingredient_handler(recipe_id: int, requirement_id: int):
     user_id = session["user_id"]
     recipe_slug = request.form["recipe_slug"]
 
-    Requirement.delete(connect(), user_id, recipe_id, requirement_id)
+    Requirement.delete(connect(), requirement_id, recipe_id, user_id)
 
     return redirect(f"/recipes/{recipe_slug}/edit")
 

@@ -116,6 +116,12 @@ input {
   padding: 0.15rem 0.5rem;
   border-radius: 0.25rem;
   border-width: 0px;
+  background: light-dark(#eee, #111);
+}
+
+td,
+th {
+  padding: 0.25rem 0.5rem;
 }
 
 header {
