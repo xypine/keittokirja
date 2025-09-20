@@ -37,7 +37,8 @@ def inject_nav_items():
 
 @app.route("/")
 def index():
-    return render_template("home.html")
+    recipes = RecipeListing.get(connect(), limit=6)
+    return render_template("home.html", top_picks=recipes)
 
 
 @app.route("/login")

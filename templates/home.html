@@ -71,54 +71,21 @@
   </div>
   <div class="searchContainer">
     <h1 class="logo">Keittokirja</h1>
-    <form class="search">
-      <input name="search" type="text" placeholder="Placeholder" autofocus />
+    <form class="search" action="/recipes">
+      <input name="name_like" type="text" placeholder="Search recipes" autofocus />
     </form>
     {% include './components/navbar.html' %}
   </div>
   <div class="topPicks">
-    <a href="/page" class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>Recipe</h2>
-        <p>by user</p>
-      </div>
-    </a>
-    <a href="/page" class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>Recipe</h2>
-        <p>by user</p>
-      </div>
-    </a>
-    <a href="/page" class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>Recipe</h2>
-        <p>by user</p>
-      </div>
-    </a>
-    <a href="/page" class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>Recipe</h2>
-        <p>by user</p>
-      </div>
-    </a>
-    <a href="/page" class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>Recipe</h2>
-        <p>by user</p>
-      </div>
-    </a>
-    <a href="/page" class="card">
-      <div class="bg"></div>
-      <div class="text">
-        <h2>Recipe</h2>
-        <p>by user</p>
-      </div>
-    </a>
+    {% for recipe in top_picks %}
+      <a href="/recipes/{{ recipe.slug }}" class="card">
+        <div class="bg"></div>
+        <div class="text">
+          <h2>{{ recipe.name }}</h2>
+          <p>by {{ recipe.creator_name }}</p>
+        </div>
+      </a>
+    {% endfor %}
   </div>
 {% endblock %}
 <!-- vim: set filetype=htmldjango: -->

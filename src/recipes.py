@@ -26,7 +26,10 @@ class RecipeListing:
 
     @staticmethod
     def get(
-        db: Connection, created_by: str | None = None, name_like: str | None = None
+        db: Connection,
+        created_by: str | None = None,
+        name_like: str | None = None,
+        limit: int | None = None,
     ):
         name_like = f"%{name_like}%" if name_like is not None else None
         rows = db.execute(
@@ -38,8 +41,9 @@ class RecipeListing:
                 WHERE
                     (?1 IS NULL OR r.created_by = ?1) AND
                     (?2 IS NULL OR r.name LIKE ?2)
+                LIMIT COALESCE(?3, 999999)
             """,
-            [created_by, name_like],
+            [created_by, name_like, limit],
         ).fetchall()
         db.close()
         return [RecipeListing(*row) for row in rows]
