@@ -86,7 +86,7 @@ def logout():
 
 @app.route("/ingredients")
 def ingredients():
-    user_id = session["user_id"]
+    user_id = session.get("user_id")
     created_by = request.args.get("created_by")
     created_by_id = None
     if created_by == "me":
@@ -103,6 +103,9 @@ def ingredients():
 
 @app.route("/ingredients/new")
 def ingredients_new():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
     return render_template("ingredients_new.html")
 
 
@@ -119,7 +122,7 @@ def new_ingredient_handler():
 
 @app.route("/recipes")
 def recipes():
-    user_id = session["user_id"]
+    user_id = session.get("user_id")
     created_by = request.args.get("created_by")
     created_by_id = None
     if created_by == "me":
@@ -131,11 +134,15 @@ def recipes():
         recipes=recipes,
         created_by=or_empty(created_by),
         name_like=or_empty(name_like),
+        logged_in=bool(user_id),
     )
 
 
 @app.route("/recipes/new")
 def recipes_new():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
     return render_template("recipes_new.html")
 
 
@@ -152,15 +159,21 @@ def new_recipe_handler():
 
 @app.route("/recipes/<slug>")
 def recipe(slug: str):
-    user_id = session["user_id"]
+    user_id = session.get("user_id")
     recipe = Recipe.get_by_slug(connect(), slug)
     return render_template(
-        "recipe.html", recipe=recipe, own=(recipe.created_by == user_id)
+        "recipe.html",
+        recipe=recipe,
+        own=(recipe.created_by == user_id),
+        logged_in=bool(user_id),
     )
 
 
 @app.route("/recipes/<slug>/edit")
 def recipe_edit(slug: str):
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
     recipe = Recipe.get_by_slug(connect(), slug)
     recipes = RecipeListing.get(connect())
     ingredients = Ingredient.get(connect())
@@ -235,8 +248,3 @@ def delete_recipe_step_handler(recipe_id: int, step_id: int):
     Step.delete(connect(), step_id, recipe_id, user_id)
 
     return redirect(f"/recipes/{recipe_slug}/edit")
-
-
-@app.route("/page")
-def hello_world():
-    return render_template("sample.html")

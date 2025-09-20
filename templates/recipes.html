@@ -71,12 +71,14 @@
           <span>Search</span>
           <input type="text" name="name_like" value="{{ name_like }}" accesskey="s" placeholder="Recipe name" autofocus />
         </label>
-        <button type="submit" name="created_by" value="" class="btn{% if created_by != "me" %} active{% endif %}">
-          All
-        </button>
-        <button type="submit" name="created_by" value="me" class="btn{% if created_by == "me" %} active{% endif %}">
-          Created by you
-        </button>
+        {% if logged_in %}
+          <button type="submit" name="created_by" value="" class="btn{% if created_by != "me" %} active{% endif %}">
+            All
+          </button>
+          <button type="submit" name="created_by" value="me" class="btn{% if created_by == "me" %} active{% endif %}">
+            Created by you
+          </button>
+        {% endif %}
       </form>
     </div>
     <div class="recipes">
