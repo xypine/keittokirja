@@ -5,7 +5,9 @@ import hashlib
 import os
 from glob import glob
 
-DATABASE_URL = os.environ["DATABASE_URL"]
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL must be set!")
 
 # Connect to database
 conn = sqlite3.connect(DATABASE_URL)

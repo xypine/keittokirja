@@ -7,6 +7,7 @@ from src.db import connect
 from src.auth import (
     CREDENTIAL_CHECK_OK,
     CREDENTIAL_CHECK_UNVERIFIED,
+    PRE_TRUSTED_USER,
     check_credentials,
     create_credentials,
     forget_session,
@@ -18,7 +19,7 @@ from src.utils import or_empty
 app = Flask(__name__)
 app.secret_key = environ["SECRET_KEY"]
 
-VERIFY_CONTACT = environ["VERIFY_CONTACT"]
+VERIFY_CONTACT = environ.get("VERIFY_CONTACT") or "the administrator"
 
 
 @app.context_processor
@@ -84,6 +85,8 @@ def register():
 
     result = create_credentials(connect(), username, password1)
     if result:
+        if username == PRE_TRUSTED_USER:
+            return "User created, you can now log in!"
         return f"User created, you can log in after your account has been verified. Contact {VERIFY_CONTACT} to get your account verified."
 
     return "Error creating user, maybe the username is already taken?"

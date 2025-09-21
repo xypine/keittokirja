@@ -1,6 +1,9 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlite3 import Connection
 from flask import session
+from os import environ
+
+PRE_TRUSTED_USER = environ.get("TRUSTED_USER")
 
 
 def create_credentials(db: Connection, username: str, password: str):
@@ -38,7 +41,7 @@ def check_credentials(db: Connection, username: str, password: str):
         ).fetchone()
 
         if check_password_hash(password_hash, password):
-            if not verified:
+            if not verified and username != PRE_TRUSTED_USER:
                 return CREDENTIAL_CHECK_UNVERIFIED
 
             session["user_id"] = user_id
