@@ -5,7 +5,7 @@ from lib.auth import (
     CREDENTIAL_CHECK_OK,
     CREDENTIAL_CHECK_UNVERIFIED,
     PRE_TRUSTED_USER,
-    check_credentials,
+    try_login,
     create_credentials,
     forget_session,
 )
@@ -28,7 +28,7 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    result = check_credentials(db, username, password)
+    result = try_login(db, username, password)
     if result == CREDENTIAL_CHECK_OK:
         return redirect("/")
     elif result == CREDENTIAL_CHECK_UNVERIFIED:
