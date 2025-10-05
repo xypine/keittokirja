@@ -120,6 +120,7 @@
                 </td>
                 <td>
                   <form method="POST" action="/recipes/{{ recipe.id }}/ingredients/{{ ingredient.id }}/delete">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
                     <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
                     <button type="submit" class="btn">remove</button>
                   </form>
@@ -130,6 +131,7 @@
           </table>
         {% endif %}
         <form method="POST" action="/recipes/{{ recipe.id }}/ingredients">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
           <fieldset class="card">
             <legend>Add requirement</legend>
             <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
@@ -181,10 +183,12 @@
               <fieldset class="card" id="{{ step.id }}">
                 <legend>{{ step.summary }}</legend>
                 <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/delete">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
                   <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
                   <button type="submit" class="btn rm">Remove</button>
                 </form>
                 <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/edit">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
                     <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
                     <label>
                       <span>summary</span>
@@ -202,6 +206,7 @@
           <hr />
         {% endif %}
         <form method="POST" action="/recipes/{{ recipe.id }}/steps">
+          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
           <fieldset class="card">
             <legend>New step</legend>
             <input hidden name="recipe_slug" value="{{ recipe.slug }}" />

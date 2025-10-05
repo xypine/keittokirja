@@ -44,6 +44,7 @@
         <h2 class="subtitle">{% block title %}New Ingredient{% endblock %}</h2>
       </legend>
       <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
         <label>
           <span>Name</span>
           <input name="name" type="text" autofocus />

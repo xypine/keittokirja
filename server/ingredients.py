@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, session
 
+from lib.csrf import check_csrf_token
 from lib.ingredients import Ingredient, NewIngredient
 from lib.utils import or_empty
 from server import get_db
@@ -36,6 +37,7 @@ def ingredients_new():
 
 @ingredients.route("/ingredients/new", methods=["POST"])
 def new_ingredient_handler():
+    check_csrf_token()
     db = get_db()
 
     name = request.form["name"]

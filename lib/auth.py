@@ -3,6 +3,8 @@ from sqlite3 import Connection
 from flask import session
 from os import environ
 
+from lib.csrf import CSRF_KEY, implant_csrf_token
+
 PRE_TRUSTED_USER = environ.get("TRUSTED_USER")
 
 
@@ -31,7 +33,7 @@ CREDENTIAL_CHECK_ERROR = 2
 CREDENTIAL_CHECK_UNVERIFIED = 3
 
 
-def check_credentials(db: Connection, username: str, password: str):
+def try_login(db: Connection, username: str, password: str):
     try:
         [user_id, password_hash, verified] = db.execute(
             """
@@ -46,6 +48,7 @@ def check_credentials(db: Connection, username: str, password: str):
 
             session["user_id"] = user_id
             session["username"] = username
+            implant_csrf_token()
             return CREDENTIAL_CHECK_OK
     except Exception as e:
         print("Error logging in:", e)
@@ -57,3 +60,4 @@ def check_credentials(db: Connection, username: str, password: str):
 def forget_session():
     del session["user_id"]
     del session["username"]
+    del session[CSRF_KEY]

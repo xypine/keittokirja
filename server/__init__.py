@@ -1,9 +1,9 @@
 from os import environ
-from flask import Flask, flash, request, redirect, render_template
+from flask import Flask, flash, request, redirect, render_template, abort
 
 
 from lib.db import close_db, get_db
-from lib.errors import UserError
+from lib.errors import CSRFError, UserError
 from server.auth import auth
 from server.ingredients import ingredients
 from server.recipes import recipes
@@ -18,6 +18,11 @@ app.secret_key = environ["SECRET_KEY"]
 def handle_user_error(e):
     flash(str(e), "error")
     return redirect(request.referrer or "/")
+
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    abort(403)
 
 
 @app.context_processor

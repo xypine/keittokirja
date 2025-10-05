@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, session
 
+from lib.csrf import check_csrf_token
 from lib.ingredients import Ingredient
 from lib.utils import or_empty
 from lib.recipes import Recipe, NewRecipe, RecipeListing
@@ -40,6 +41,7 @@ def recipes_new():
 
 @recipes.route("/recipes/new", methods=["POST"])
 def new_recipe_handler():
+    check_csrf_token()
     db = get_db()
 
     name = request.form["name"]
@@ -82,6 +84,7 @@ def recipe_edit(slug: str):
 
 @recipes.route("/recipes/<recipe_id>/ingredients", methods=["POST"])
 def new_recipe_ingredient_handler(recipe_id: int):
+    check_csrf_token()
     db = get_db()
 
     user_id = session["user_id"]
@@ -103,6 +106,7 @@ def new_recipe_ingredient_handler(recipe_id: int):
     "/recipes/<recipe_id>/ingredients/<requirement_id>/delete", methods=["POST"]
 )
 def delete_recipe_ingredient_handler(recipe_id: int, requirement_id: int):
+    check_csrf_token()
     db = get_db()
 
     user_id = session["user_id"]
@@ -115,6 +119,7 @@ def delete_recipe_ingredient_handler(recipe_id: int, requirement_id: int):
 
 @recipes.route("/recipes/<recipe_id>/steps", methods=["POST"])
 def new_recipe_step_handler(recipe_id: int):
+    check_csrf_token()
     db = get_db()
 
     user_id = session["user_id"]
@@ -130,6 +135,7 @@ def new_recipe_step_handler(recipe_id: int):
 
 @recipes.route("/recipes/<recipe_id>/steps/<step_id>/edit", methods=["POST"])
 def edit_recipe_step_handler(recipe_id: int, step_id: int):
+    check_csrf_token()
     db = get_db()
 
     user_id = session["user_id"]
@@ -144,6 +150,7 @@ def edit_recipe_step_handler(recipe_id: int, step_id: int):
 
 @recipes.route("/recipes/<recipe_id>/steps/<step_id>/delete", methods=["POST"])
 def delete_recipe_step_handler(recipe_id: int, step_id: int):
+    check_csrf_token()
     db = get_db()
 
     user_id = session["user_id"]
