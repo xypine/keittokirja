@@ -1,9 +1,9 @@
 from datetime import datetime
 from sqlite3 import Connection
 from typing import List
-from src.steps import Step
-from src.utils import slugify
-from src.requirements import Requirement
+from lib.steps import Step
+from lib.utils import slugify
+from lib.requirements import Requirement
 
 
 class RecipeListing:
