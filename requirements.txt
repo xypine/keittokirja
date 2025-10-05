@@ -1,0 +1,15 @@
+# The only direct dependency
+flask==3.1.2
+# And it's dependencies
+blinker==1.9.0
+click==8.2.1
+colorama==0.4.6 ; sys_platform == 'win32'
+gunicorn==23.0.0
+itsdangerous==2.2.0
+jinja2==3.1.6
+markupsafe==3.0.2
+packaging==25.0
+werkzeug==3.1.3
+
+# If you want something that works for sure, just use uv
+# (or the provided guide for docker)
