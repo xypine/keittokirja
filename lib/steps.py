@@ -16,11 +16,12 @@ class NewStep:
         summary: str,
         details: str,
     ) -> None:
-        if len(summary) < 3:
+        self.summary = summary.strip()
+        if len(self.summary) < 3:
             raise UserError("summary must be at least 3 characters long")
+
         self.created_by = created_by
         self.recipe_id = recipe_id
-        self.summary = summary
         self.details = details
 
     def insert(self, db: Connection):

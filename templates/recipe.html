@@ -7,6 +7,10 @@
       display: flex;
       flex-direction: column;
       gap: .5rem;
+
+      margin: 0 auto;
+      min-width: min(600px, 100vw);
+      padding-top: 2rem;
     }
 
     .content-nav {
@@ -25,6 +29,30 @@
       grid-template-columns: repeat(auto-fit, var(--item-width));
       gap: .5rem;
       padding: .5rem;
+    }
+
+    .steps {
+      list-style: none;
+
+      & summary {
+        list-style-position: outside;
+      }
+    }
+
+    .steps li {
+      margin-bottom: 1rem;
+
+      & h3 {
+        display: inline-block;
+      }
+    }
+
+    .list-marker {
+      user-select: none;
+    }
+
+    .details {
+      white-space: pre;
     }
   </style>
 {% endblock %}
@@ -71,20 +99,24 @@
       {% endif %}
       <h2>Steps</h2>
       {% if recipe.steps %}
-        <ol>
+        <ol class="steps">
           {% for step in recipe.steps %}
             <li>
               {% if step.details %}
-              <details>
+              <details open>
                 <summary>
-                  <h2>{{ step.summary }}</h2>
+                  <span class="list-marker">
+                    {{ loop.index }}.
+                  </span>
+                  <h3>{{ step.summary }}</h3>
                 </summary>
-                <div>
-                  {{ step.details }}
-                </div>
+                <div class="details">{{ step.details }}</div>
               </details>
               {% else %}
-                <h2>{{ step.summary }}</h2>
+                <span class="list-marker">
+                  {{ loop.index }}.
+                </span>
+                <h3>{{ step.summary }}</h3>
               {% endif %}
             </li>
           {% endfor %}

@@ -23,8 +23,8 @@ class NewRequirement:
     ) -> None:
         self.created_by = created_by
         self.recipe_id = recipe_id
-        self.amount = amount
-        self.extra_info = extra_info
+        self.amount = amount.strip()
+        self.extra_info = extra_info.strip() if extra_info is not None else None
 
         match [bool(ingredient_id), bool(ingredient_recipe_id)]:
             case [True, True]:

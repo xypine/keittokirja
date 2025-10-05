@@ -54,10 +54,10 @@ class NewIngredient:
     created_by: int
 
     def __init__(self, name: str, created_by: int):
-        if len(name) < 3:
+        self.name = name.strip()
+        if len(self.name) < 3:
             raise UserError("name must be at least 3 characters long")
 
-        self.name = name
         self.created_by = created_by
 
     def insert(self, db: Connection) -> Ingredient:

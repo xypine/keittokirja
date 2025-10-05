@@ -84,7 +84,6 @@ h6 {
 
 summary {
   cursor: pointer;
-  user-select: none;
 }
 
 button {
@@ -155,14 +154,6 @@ summary {
   }
 }
 
-ol {
-  list-style-position: inside;
-
-  & > * > * {
-    display: inline-block;
-  }
-}
-
 .headerBar {
   display: flex;
   align-items: baseline;
@@ -214,5 +205,12 @@ nav {
   &.error {
     color: red;
     background: black;
+  }
+}
+
+@media print {
+  nav,
+  .sessionInfo {
+    display: none !important;
   }
 }
