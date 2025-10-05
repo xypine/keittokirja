@@ -88,11 +88,16 @@
           name
         </span>
         <input type="text" name="name" value="{{ recipe.name }}">
+        <button type="submit" class="btn">Save</button>
       </label>
     </form>
     <div class="forms">
       <fieldset>
-        <legend>Ingredients</legend>
+        <legend>
+          <h2>
+            Ingredients
+          </h2>
+        </legend>
         {% if recipe.ingredients %}
           <table class="card">
             <thead>
@@ -165,7 +170,11 @@
         </form>
       </fieldset>
       <fieldset>
-        <legend>Steps</legend>
+        <legend>
+          <h2>
+            Steps
+          </h2>
+        </legend>
         {% if recipe.steps %}
           <div>
             {% for step in recipe.steps %}

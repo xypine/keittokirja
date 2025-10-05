@@ -23,7 +23,7 @@ CREATE TABLE recipe_requirement (
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-	FOREIGN KEY (recipe_id) REFERENCES recipe (id),
+	FOREIGN KEY (recipe_id, created_by) REFERENCES recipe (id, created_by),
 	FOREIGN KEY (ingredient_id) REFERENCES ingredient (id),
 	FOREIGN KEY (ingredient_recipe_id) REFERENCES recipe (id),
 	CONSTRAINT recipe_ingredient_reference CHECK (
@@ -31,7 +31,7 @@ CREATE TABLE recipe_requirement (
     (ingredient_id IS NULL AND ingredient_recipe_id IS NOT NULL)
 	),
 
-	FOREIGN KEY (created_by) REFERENCES users (id)
+	FOREIGN KEY (created_by) REFERENCES user (id)
 );
 
 CREATE UNIQUE INDEX idx_recipe_ingredient
@@ -52,6 +52,6 @@ CREATE TABLE recipe_step (
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-	FOREIGN KEY (recipe_id) REFERENCES recipe (id),
-	FOREIGN KEY (created_by) REFERENCES users (id)
+	FOREIGN KEY (recipe_id, created_by) REFERENCES recipe (id, created_by),
+	FOREIGN KEY (created_by) REFERENCES user (id)
 )
