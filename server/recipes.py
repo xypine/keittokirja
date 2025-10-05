@@ -122,9 +122,6 @@ def new_recipe_step_handler(recipe_id: int):
     summary = request.form["summary"]
     details = request.form["details"]
 
-    if len(summary) < 3:
-        raise Exception("summary must be at least 3 characters long")
-
     new = NewStep(user_id, recipe_id, summary, details)
     new.insert(db)
 
@@ -139,9 +136,6 @@ def edit_recipe_step_handler(recipe_id: int, step_id: int):
     recipe_slug = request.form["recipe_slug"]
     summary = request.form["summary"]
     details = request.form["details"]
-
-    if len(summary) < 3:
-        raise Exception("summary must be at least 3 characters long")
 
     Step(step_id, recipe_id, summary, details).put(db, user_id)
 

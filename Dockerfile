@@ -24,4 +24,4 @@ ENV DATABASE_URL=dev.db
 # Expose port
 EXPOSE 80
 
-CMD ["uv", "run", "./scripts/docker-entrypoint.sh"]
+CMD ["uv", "run", "scripts/docker-entrypoint.sh"]

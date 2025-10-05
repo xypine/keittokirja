@@ -1,6 +1,8 @@
 from sqlite3 import Connection
 from typing import Optional
 
+from lib.errors import UserError
+
 
 class NewRequirement:
     created_by: int
@@ -26,11 +28,11 @@ class NewRequirement:
 
         match [bool(ingredient_id), bool(ingredient_recipe_id)]:
             case [True, True]:
-                raise Exception(
+                raise UserError(
                     "Either ingredient_id or ingredient_recipe_id must be set"
                 )
             case [False, False]:
-                raise Exception(
+                raise UserError(
                     "ingredient_id and ingredient_recipe_id can't both be set"
                 )
 

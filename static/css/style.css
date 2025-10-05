@@ -207,3 +207,12 @@ nav {
   background: light-dark(#f7f7f7, #1c1c1c);
   border-radius: 0.25rem;
 }
+
+.banner {
+  text-align: center;
+
+  &.error {
+    color: red;
+    background: black;
+  }
+}

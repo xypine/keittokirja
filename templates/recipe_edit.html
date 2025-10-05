@@ -15,6 +15,12 @@
       gap: .5rem;
     }
 
+    .forms {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
     .filters {
       padding-inline: .5rem;
     }
@@ -77,123 +83,132 @@
       <a href="/recipes/{{ recipe.slug }}">Back</a>
     </div>
     <form>
-      <input type="text" name="name" value="{{ recipe.name }}">
+      <label>
+        <span style="display: flex;">
+          name
+        </span>
+        <input type="text" name="name" value="{{ recipe.name }}">
+      </label>
     </form>
-    <fieldset>
-      <legend>Ingredients</legend>
-      {% if recipe.ingredients %}
-        <table class="card">
-          <thead>
-            <tr>
-              <th>amount</th>
-              <th>name</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for ingredient in recipe.ingredients %}
-            <tr id="{{ ingredient.id }}">
-              <td>{{ ingredient.amount }}</td>
-              <td>{{ ingredient.name }}</td>
-              <td>
-                {% if ingredient.extra_info %}
-                    <span>{{ ingredient.extra_info }}</span>
-                {% endif %}
-              </td>
-              <td>
-                <form method="POST" action="/recipes/{{ recipe.id }}/ingredients/{{ ingredient.id }}/delete">
+    <div class="forms">
+      <fieldset>
+        <legend>Ingredients</legend>
+        {% if recipe.ingredients %}
+          <table class="card">
+            <thead>
+              <tr>
+                <th>amount</th>
+                <th>name</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for ingredient in recipe.ingredients %}
+              <tr id="{{ ingredient.id }}">
+                <td>{{ ingredient.amount }}</td>
+                <td>{{ ingredient.name }}</td>
+                <td>
+                  {% if ingredient.extra_info %}
+                      <span>{{ ingredient.extra_info }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <form method="POST" action="/recipes/{{ recipe.id }}/ingredients/{{ ingredient.id }}/delete">
+                    <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+                    <button type="submit" class="btn">remove</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+        <form method="POST" action="/recipes/{{ recipe.id }}/ingredients">
+          <fieldset class="card">
+            <legend>Add requirement</legend>
+            <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+            <div class="ingredient-selector">
+              <label>
+                <span>Raw Ingredient</span>
+                <select name="ingredient_id">
+                  <option selected value="">Not Selected</option>
+                  {% for ingredient in ingredients %}
+                    <option value="{{ ingredient.id }}">{{ ingredient.name }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+              <p>or</p>
+              <label>
+                <span>Another recipe</span>
+                <select name="ingredient_recipe_id">
+                  <option selected value="">Not Selected</option>
+                  {% for recipe_b in recipes %}
+                    {% if recipe_b.id != recipe.id %}
+                      <option value="{{ recipe_b.id }}">{{ recipe_b.name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </label>
+            </div>
+            <!-- <small>(pick one)</small> -->
+            <label>
+              <span>amount</span>
+              <input type="text" name="amount" />
+            </label>
+            <label>
+              <span>comment <small>(optional)</small></span>
+              <input type="text" name="extra_info" />
+            </label>
+            <button type="submit" class="btn">Add</button>
+          </fieldset>
+        </form>
+      </fieldset>
+      <fieldset>
+        <legend>Steps</legend>
+        {% if recipe.steps %}
+          <div>
+            {% for step in recipe.steps %}
+              <fieldset class="card" id="{{ step.id }}">
+                <legend>{{ step.summary }}</legend>
+                <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/delete">
                   <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
-                  <button type="submit" class="btn">remove</button>
+                  <button type="submit" class="btn rm">Remove</button>
                 </form>
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-      <form method="POST" action="/recipes/{{ recipe.id }}/ingredients">
-        <fieldset class="card">
-          <legend>Add requirement</legend>
-          <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
-          <div class="ingredient-selector">
-            <label>
-              <span>Raw Ingredient</span>
-              <select name="ingredient_id">
-                <option selected value="">Not Selected</option>
-                {% for ingredient in ingredients %}
-                  <option value="{{ ingredient.id }}">{{ ingredient.name }}</option>
-                {% endfor %}
-              </select>
-            </label>
-            <p>or</p>
-            <label>
-              <span>Another recipe</span>
-              <select name="ingredient_recipe_id">
-                <option selected value="">Not Selected</option>
-                {% for recipe in recipes %}
-                  <option value="{{ recipe.id }}">{{ recipe.name }}</option>
-                {% endfor %}
-              </select>
-            </label>
+                <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/edit">
+                    <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+                    <label>
+                      <span>summary</span>
+                      <input type="text" name="summary" placeholder="Chop your chopsticks" value="{{ step.summary }}" />
+                    </label>
+                    <label>
+                      <span>details</span>
+                      <textarea type="text" name="details" cols="80" rows="10">{{step.details}}</textarea>
+                    </label>
+                    <button type="submit" class="btn">Save</button>
+                </form>
+              </fieldset>
+            {% endfor %}
           </div>
-          <!-- <small>(pick one)</small> -->
-          <label>
-            <span>amount</span>
-            <input type="text" name="amount" />
-          </label>
-          <label>
-            <span>comment <small>(optional)</small></span>
-            <input type="text" name="extra_info" />
-          </label>
-          <button type="submit" class="btn">Add</button>
-        </fieldset>
-      </form>
-    </fieldset>
-    <fieldset>
-      <legend>Steps</legend>
-      {% if recipe.steps %}
-        <div>
-          {% for step in recipe.steps %}
-            <fieldset class="card" id="{{ step.id }}">
-              <legend>{{ step.summary }}</legend>
-              <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/delete">
-                <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
-                <button type="submit" class="btn rm">Remove</button>
-              </form>
-              <form method="POST" action="/recipes/{{ recipe.id }}/steps/{{ step.id }}/edit">
-                  <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
-                  <label>
-                    <span>summary</span>
-                    <input type="text" name="summary" placeholder="Chop your chopsticks" value="{{ step.summary }}" />
-                  </label>
-                  <label>
-                    <span>details</span>
-                    <textarea type="text" name="details" cols="80" rows="10">{{step.details}}</textarea>
-                  </label>
-                  <button type="submit" class="btn">Save</button>
-              </form>
-            </fieldset>
-          {% endfor %}
-        </div>
-        <hr />
-      {% endif %}
-      <form method="POST" action="/recipes/{{ recipe.id }}/steps">
-        <fieldset class="card">
-          <legend>New step</legend>
-          <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
-          <label>
-            <span>summary</span>
-            <input type="text" name="summary" placeholder="Chop your chopsticks" />
-          </label>
-          <label>
-            <span>details</span>
-            <textarea type="text" name="details" cols="80" rows="10"></textarea>
-          </label>
-          <button type="submit" class="btn">Add</button>
-        </fieldset>
-      </form>
-    </fieldset>
+          <hr />
+        {% endif %}
+        <form method="POST" action="/recipes/{{ recipe.id }}/steps">
+          <fieldset class="card">
+            <legend>New step</legend>
+            <input hidden name="recipe_slug" value="{{ recipe.slug }}" />
+            <label>
+              <span>summary</span>
+              <input type="text" name="summary" placeholder="Chop your chopsticks" />
+            </label>
+            <label>
+              <span>details</span>
+              <textarea type="text" name="details" cols="80" rows="10"></textarea>
+            </label>
+            <button type="submit" class="btn">Add</button>
+          </fieldset>
+        </form>
+      </fieldset>
+    </div>
   </div>
 {% endblock %}
 <!-- vim: set filetype=htmldjango: -->

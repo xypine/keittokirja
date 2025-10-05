@@ -1,5 +1,7 @@
 from sqlite3 import Connection
 
+from lib.errors import UserError
+
 
 class NewStep:
     created_by: int
@@ -14,6 +16,8 @@ class NewStep:
         summary: str,
         details: str,
     ) -> None:
+        if len(summary) < 3:
+            raise UserError("summary must be at least 3 characters long")
         self.created_by = created_by
         self.recipe_id = recipe_id
         self.summary = summary
@@ -68,6 +72,8 @@ class Step:
         db.commit()
 
     def put(self, db: Connection, user_id: int):
+        if len(self.summary) < 3:
+            raise UserError("summary must be at least 3 characters long")
         db.execute(
             """
             UPDATE recipe_step

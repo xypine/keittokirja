@@ -11,6 +11,13 @@
     {% block head %}{% endblock %}
   </head>
   <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="banner {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     {% block body %}{% endblock %}
   </body>
 </html>
