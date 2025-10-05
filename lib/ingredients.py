@@ -44,7 +44,6 @@ class Ingredient:
             """,
             [created_by, name_like],
         ).fetchall()
-        db.close()
         return [Ingredient(*row) for row in rows]
 
 

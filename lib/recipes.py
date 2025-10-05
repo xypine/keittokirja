@@ -45,7 +45,6 @@ class RecipeListing:
             """,
             [created_by, name_like, limit],
         ).fetchall()
-        db.close()
         return [RecipeListing(*row) for row in rows]
 
 
