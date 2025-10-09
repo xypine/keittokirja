@@ -47,3 +47,15 @@ def new_ingredient_handler():
     new.insert(db)
 
     return redirect("/ingredients")
+
+
+@ingredients.route("/ingredients/<ingredient_id>/delete", methods=["POST"])
+def delete_recipe_ingredient_handler(ingredient_id: int):
+    check_csrf_token()
+    db = get_db()
+
+    user_id = session["user_id"]
+
+    Ingredient.delete(db, ingredient_id, user_id)
+
+    return redirect(f"/ingredients")

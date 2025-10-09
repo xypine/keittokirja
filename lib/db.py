@@ -8,6 +8,7 @@ database_url = os.environ["DATABASE_URL"]
 def connect():
     conn = sqlite3.connect(database_url)
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.row_factory = sqlite3.Row
     return conn
 
 

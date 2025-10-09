@@ -88,6 +88,14 @@
         <div class="text">
           <h2>{{ ingredient.name }}</h2>
           <p>added by {{ ingredient.creator_name or ingredient.created_by }}</p>
+          {% if ingredient.in_use %}
+            <span>in use by <a href="/recipes?ingredients={{ ingredient.name }}">{{ ingredient.in_use }} recipes</a></span>
+          {% else %}
+            <form method="POST" action="/ingredients/{{ ingredient.id }}/delete">
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+              <button class="btn" type="submit">delete</button>
+            </form>
+          {% endif %}
         </div>
       </div>
     {% endfor %}

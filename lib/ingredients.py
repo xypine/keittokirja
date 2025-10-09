@@ -1,33 +1,19 @@
+from dataclasses import dataclass
 from datetime import datetime
 from sqlite3 import Connection
 
 from lib.errors import UserError
 
 
+@dataclass
 class Ingredient:
     id: int
     name: str
     created_by: int
     created_at: datetime
     updated_at: datetime
-
     creator_name: str | None
-
-    def __init__(
-        self,
-        id: int,
-        name: str,
-        created_by: int,
-        created_at: datetime,
-        updated_at: datetime,
-        creator_name: str | None,
-    ):
-        self.id = id
-        self.name = name
-        self.created_by = created_by
-        self.created_at = created_at
-        self.updated_at = updated_at
-        self.creator_name = creator_name
+    in_use: int
 
     @staticmethod
     def get(
@@ -37,7 +23,8 @@ class Ingredient:
         rows = db.execute(
             """
                 SELECT
-                    i.id, i.name, i.created_by, i.created_at, i.updated_at, u.username
+                    i.id, i.name, i.created_by, i.created_at, i.updated_at, u.username,
+                    (SELECT COUNT(*) FROM recipe_requirement r WHERE r.ingredient_id = i.id)
                 FROM ingredient i
                 LEFT JOIN user u ON u.id = i.created_by
                 WHERE
@@ -47,6 +34,19 @@ class Ingredient:
             [created_by, name_like],
         ).fetchall()
         return [Ingredient(*row) for row in rows]
+
+    @staticmethod
+    def delete(db: Connection, id: int, user_id: int):
+        db.execute(
+            """
+            DELETE FROM ingredient
+            WHERE
+                id = ?
+                AND created_by = ?
+            """,
+            [id, user_id],
+        )
+        db.commit()
 
 
 class NewIngredient:
@@ -71,5 +71,11 @@ class NewIngredient:
         ).fetchone()
         db.commit()
         return Ingredient(
-            id, name, created_by, created_at, updated_at, creator_name=None
+            id,
+            name,
+            created_by,
+            created_at,
+            updated_at,
+            creator_name=None,
+            in_use=False,
         )

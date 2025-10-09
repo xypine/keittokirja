@@ -4,6 +4,47 @@ from typing import Optional
 from lib.errors import UserError
 
 
+class Requirement:
+    id: int
+    name: str
+    amount: str
+    extra_info: Optional[str]
+    ingredient_link: Optional[str]
+    recipe_link: Optional[str]
+
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        amount: str,
+        extra_info: Optional[str],
+        ingredient_id: Optional[int],
+        ingredient_recipe_slug: Optional[str],
+    ):
+        self.id = id
+        self.name = name
+        self.amount = amount
+        self.extra_info = extra_info
+        if ingredient_id:
+            self.ingredient_link = f"/ingredients#{ingredient_id}"
+        if ingredient_recipe_slug:
+            self.recipe_link = f"/recipes/{ingredient_recipe_slug}"
+
+    @staticmethod
+    def delete(db: Connection, id: int, recipe_id: int, user_id: int):
+        db.execute(
+            """
+            DELETE FROM recipe_requirement
+            WHERE
+                id = ?
+                AND recipe_id = ?
+                AND created_by = ?
+            """,
+            [id, recipe_id, user_id],
+        )
+        db.commit()
+
+
 class NewRequirement:
     created_by: int
     recipe_id: int
@@ -60,46 +101,5 @@ class NewRequirement:
                 self.ingredient_recipe_id,
                 self.created_by,
             ],
-        )
-        db.commit()
-
-
-class Requirement:
-    id: int
-    name: str
-    amount: str
-    extra_info: Optional[str]
-    ingredient_link: Optional[str]
-    recipe_link: Optional[str]
-
-    def __init__(
-        self,
-        id: int,
-        name: str,
-        amount: str,
-        extra_info: Optional[str],
-        ingredient_id: Optional[int],
-        ingredient_recipe_slug: Optional[str],
-    ):
-        self.id = id
-        self.name = name
-        self.amount = amount
-        self.extra_info = extra_info
-        if ingredient_id:
-            self.ingredient_link = f"/ingredients#{ingredient_id}"
-        if ingredient_recipe_slug:
-            self.recipe_link = f"/recipes/{ingredient_recipe_slug}"
-
-    @staticmethod
-    def delete(db: Connection, id: int, recipe_id: int, user_id: int):
-        db.execute(
-            """
-            DELETE FROM recipe_requirement
-            WHERE
-                id = ?
-                AND recipe_id = ?
-                AND created_by = ?
-            """,
-            [id, recipe_id, user_id],
         )
         db.commit()

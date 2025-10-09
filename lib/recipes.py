@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from sqlite3 import Connection
 from typing import List
@@ -7,23 +8,12 @@ from lib.utils import slugify
 from lib.requirements import Requirement
 
 
+@dataclass
 class RecipeListing:
     id: int
     name: str
     slug: str
     creator_name: str
-
-    def __init__(
-        self,
-        id: int,
-        name: str,
-        slug: str,
-        creator_name: str,
-    ):
-        self.id = id
-        self.name = name
-        self.slug = slug
-        self.creator_name = creator_name
 
     @staticmethod
     def get(
@@ -49,6 +39,7 @@ class RecipeListing:
         return [RecipeListing(*row) for row in rows]
 
 
+@dataclass
 class Recipe:
     id: int
     name: str
@@ -60,38 +51,19 @@ class Recipe:
     ingredients: List[Requirement]
     steps: List[Step]
 
-    def __init__(
-        self,
-        id: int,
-        name: str,
-        slug: str,
-        created_by: int,
-        created_at: datetime,
-        updated_at: datetime,
-        creator_name: str,
-        ingredients: List[Requirement],
-        steps: List[Step],
-    ):
-        self.id = id
-        self.name = name
-        self.slug = slug
-        self.created_by = created_by
-        self.created_at = created_at
-        updated_at = updated_at
-        self.creator_name = creator_name
-        self.ingredients = ingredients
-        self.steps = steps
-
     @staticmethod
     def get_by_slug(db: Connection, slug: str):
         rows = db.execute(
             """
                 WITH correct_recipe AS (
-                    SELECT * FROM recipe WHERE slug = ?1
+                    SELECT
+                        id, name, slug, created_by, created_at, updated_at
+                    FROM recipe
+                    WHERE slug = ?1
                 ),
                 correct_requirements AS (
                     SELECT
-                        rr.*,
+                        rr.id, amount, extra_info, ingredient_id,
                         COALESCE(ingredient.name, ir.name) AS "rname",
                         ir.slug AS "slug"
                     FROM recipe_requirement rr
@@ -100,7 +72,8 @@ class Recipe:
                     LEFT JOIN recipe ir ON ir.id = rr.ingredient_recipe_id
                 ),
                 correct_steps AS (
-                  SELECT *
+                  SELECT
+                    rs.id, summary, details
                   FROM recipe_step rs
                   JOIN correct_recipe ON rs.recipe_id = correct_recipe.id
                 )
